@@ -1,4 +1,4 @@
-﻿namespace WaveChat.Api.Configuration;
+﻿namespace WaveChat.Authorization.Configuration;
 
 using Common.Helpers;
 using Common.Validator;

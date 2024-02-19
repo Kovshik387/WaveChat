@@ -6,19 +6,35 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>5caf500b-3a02-44bd-9cfd-646a425129cb</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
     <DockerfileContext>..\..\..\..</DockerfileContext>
+	<NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
+	<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4" />
+    <PackageReference Include="Serilog.Enrichers.CorrelationId" Version="3.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	<PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Services\WaveChat.Services.Logger\WaveChat.Services.Logger.csproj" />
     <ProjectReference Include="..\..\..\Services\WaveChat.Services.Settings\WaveChat.Services.Settings.csproj" />
     <ProjectReference Include="..\..\..\Shared\WaveChat.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="docs\" />
+    <Folder Include="Styles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\assets\css\theme-flattop.css" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿namespace WaveChat.Api.Configuration;
+﻿namespace WaveChat.Authorization.Configuration;
 
 using Common;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -8,7 +8,7 @@ public static class HealthCheckConfiguration
     public static IServiceCollection AddAppHealthChecks(this IServiceCollection services)
     {
         services.AddHealthChecks()
-            .AddCheck<SelfHealthCheck>("NetSchool.API");
+            .AddCheck<SelfHealthCheck>("WaveChat.API");
 
         return services;
     }

@@ -1,4 +1,4 @@
-﻿namespace WaveChat.Api.Configuration;
+﻿namespace WaveChat.Authorization.Configuration;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
