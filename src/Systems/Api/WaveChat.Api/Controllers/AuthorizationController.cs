@@ -13,7 +13,7 @@ public class AuthorizationController : ControllerBase
     }
 
     /// <summary>
-    /// Тест
+    /// 
     /// </summary>
     /// <param name="a"></param>
     /// <returns></returns>

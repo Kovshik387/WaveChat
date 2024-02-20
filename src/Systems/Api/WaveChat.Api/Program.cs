@@ -31,7 +31,7 @@ builder.Services.RegisterService();
 
 var app = builder.Build();
 
-app.UseStaticFiles().UseDefaultFiles();
+app.UseStaticFiles();
 app.UseAppCors();
 app.UseAppHealthChecks();
 app.UseAppControllerAndViews();
