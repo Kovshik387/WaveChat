@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using WaveChat.Services.Logger;
 
 namespace WaveChat.Authorization.Controllers;
 
@@ -7,19 +8,17 @@ namespace WaveChat.Authorization.Controllers;
 [Route("v{version:apiVersion}/[Controller]/[Action]")]
 public class AuthorizationController : ControllerBase
 {
-    public AuthorizationController()
+    private IAppLogger _logger;
+    public AuthorizationController(IAppLogger appLogger)
     {
-        
+        _logger = appLogger;
     }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="a"></param>
-    /// <returns></returns>
 
     [HttpGet]
     [ApiVersion("1.0")]
-    
-    public IActionResult Index([FromQuery]int a) => Ok(a);
+
+    public IActionResult Index([FromQuery] int a)
+    {
+        return Ok(a);
+    }
 }

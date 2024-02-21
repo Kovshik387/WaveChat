@@ -21,8 +21,8 @@ public static class SwaggerConfiguration
     /// <param name="swaggerSettings"></param>
     public static IServiceCollection AddAppSwagger(this IServiceCollection services,
         MainSettings mainSettings,
-        SwaggerSettings swaggerSettings
-        //IdentitySettings identitySettings
+        SwaggerSettings swaggerSettings,
+        IdentitySettings identitySettings
         )
     {
         if (!swaggerSettings.Enabled)
@@ -56,38 +56,38 @@ public static class SwaggerConfiguration
             if (File.Exists(xmlPath))
                 options.IncludeXmlComments(xmlPath);
 
-            
 
-            //options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-            //{
-            //    Name = "Bearer",
-            //    Type = SecuritySchemeType.OAuth2,
-            //    Scheme = "oauth2",
-            //    BearerFormat = "JWT",
-            //    In = ParameterLocation.Header,
-            //    Flows = new OpenApiOAuthFlows
-            //    {
-            //        ClientCredentials = new OpenApiOAuthFlow
-            //        {
-            //            TokenUrl = new Uri($"{identitySettings.Url}/connect/token"),
-            //            Scopes = new Dictionary<string, string>
-            //            {
-            //                { AppScopes.BooksRead, "Read" },
-            //                { AppScopes.BooksWrite, "Write" }
-            //            }
-            //        },
 
-            //        Password = new OpenApiOAuthFlow
-            //        {
-            //            TokenUrl = new Uri($"{identitySettings.Url}/connect/token"),
-            //            Scopes = new Dictionary<string, string>
-            //            {
-            //                { AppScopes.BooksRead, "Read" },
-            //                { AppScopes.BooksWrite, "Write" }
-            //            }
-            //        }
-            //    }
-            //});
+            options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+            {
+                Name = "Bearer",
+                Type = SecuritySchemeType.OAuth2,
+                Scheme = "oauth2",
+                BearerFormat = "JWT",
+                In = ParameterLocation.Header,
+                Flows = new OpenApiOAuthFlows
+                {
+                    ClientCredentials = new OpenApiOAuthFlow
+                    {
+                        TokenUrl = new Uri($"{identitySettings.Url}/connect/token"),
+                        Scopes = new Dictionary<string, string>
+                        {
+                            { AppScopes.BooksRead, "Read" },
+                            { AppScopes.BooksWrite, "Write" }
+                        }
+                    },
+
+                    Password = new OpenApiOAuthFlow
+                    {
+                        TokenUrl = new Uri($"{identitySettings.Url}/connect/token"),
+                        Scopes = new Dictionary<string, string>
+                        {
+                            { AppScopes.BooksRead, "Read" },
+                            { AppScopes.BooksWrite, "Write" }
+                        }
+                    }
+                }
+            });
 
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
@@ -151,13 +151,13 @@ public static class SwaggerConfiguration
                             mainSettings!.PublicUrl + $"/docs/{description.GroupName}/api.json",
                             description.GroupName.ToUpperInvariant())
                 );
-                options.InjectStylesheet("../assets/css/theme-flattop.css");                
-                //options.DocExpansion(DocExpansion.List);
-                //options.DefaultModelsExpandDepth(-1);
-                //options.OAuthAppName(AppTitle);
+                options.InjectStylesheet("../assets/css/theme-flattop.css");
+                options.DocExpansion(DocExpansion.List);
+                options.DefaultModelsExpandDepth(-1);
+                options.OAuthAppName(AppTitle);
 
-                //options.OAuthClientId(swaggerSettings?.OAuthClientId ?? "");
-                //options.OAuthClientSecret(swaggerSettings?.OAuthClientSecret ?? "");
+                options.OAuthClientId(swaggerSettings?.OAuthClientId ?? "");
+                options.OAuthClientSecret(swaggerSettings?.OAuthClientSecret ?? "");
             }
             
 

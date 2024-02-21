@@ -21,7 +21,7 @@ builder.Services.AddAppValidator();
 
 
 builder.Services.AddAppVersioning();
-builder.Services.AddAppSwagger(mainSettings,swaggerSettings);
+builder.Services.AddAppSwagger(mainSettings,swaggerSettings,identitySettings);
 
 builder.Services.AddAppCors();
 builder.Services.AddAppControllerAndViews();
@@ -32,10 +32,17 @@ builder.Services.RegisterService();
 var app = builder.Build();
 
 app.UseStaticFiles();
+
 app.UseAppCors();
 app.UseAppHealthChecks();
-app.UseAppControllerAndViews();
-app.UseRouting();
 app.UseAppSwagger();
+app.UseAppControllerAndViews();
+
+app.Run(async (context) =>
+{
+    var response = context.Response;
+    response.ContentType = "text/html; charset=utf-8";
+    await response.WriteAsync("<h1>Hello WaveChat!</h1");
+});
 
 app.Run();
