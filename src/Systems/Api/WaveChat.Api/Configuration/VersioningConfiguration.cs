@@ -6,7 +6,7 @@ namespace WaveChat.Authorization.Configuration
     {
         // <summary>
         /// Add version support for API
-        /// </summary>
+        /// 
         /// <param name="services">Services collection</param>
         public static IServiceCollection AddAppVersioning(this IServiceCollection services)
         {

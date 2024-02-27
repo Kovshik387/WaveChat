@@ -52,7 +52,7 @@ public static class ObjectJsonExtension
     /// <summary>
     /// Try deserialize object from JSON string
     /// </summary>
-    public static bool TryFromJsonString<T>(this string obj, out T? result)
+    public static bool TryFromJsonString<T>(this string obj, out T result)
     {
         try
         {

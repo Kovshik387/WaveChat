@@ -4,6 +4,7 @@ using WaveChat.Authorization.Configuration;
 using WaveChat.Services.Logger;
 using WaveChat.Services.Settings;
 using WaveChat.Settings;
+using WaveChat.Context;
 
 var mainSettings = Settings.Load<MainSettings>("Main");
 var logSettings = Settings.Load<LogSettings>("Log");
@@ -13,6 +14,8 @@ var identitySettings = Settings.Load<IdentitySettings>("Identity");
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddAppLogger(mainSettings,logSettings);
+
+builder.Services.AddAppDbContext(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -37,12 +40,5 @@ app.UseAppCors();
 app.UseAppHealthChecks();
 app.UseAppSwagger();
 app.UseAppControllerAndViews();
-
-app.Run(async (context) =>
-{
-    var response = context.Response;
-    response.ContentType = "text/html; charset=utf-8";
-    await response.WriteAsync("<h1>Hello WaveChat!</h1");
-});
 
 app.Run();

@@ -13,6 +13,10 @@
 
   <ItemGroup>
 	<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
+	  <PrivateAssets>all</PrivateAssets>
+	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>
 	<PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4" />
@@ -23,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Data\Contex\WaveChat.Context\WaveChat.Context.csproj" />
     <ProjectReference Include="..\..\..\Services\WaveChat.Services.Logger\WaveChat.Services.Logger.csproj" />
     <ProjectReference Include="..\..\..\Services\WaveChat.Services.Settings\WaveChat.Services.Settings.csproj" />
     <ProjectReference Include="..\..\..\Shared\WaveChat.Common.csproj" />

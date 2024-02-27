@@ -1,5 +1,8 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using WaveChat.Context;
 using WaveChat.Services.Logger;
 
 namespace WaveChat.Authorization.Controllers;
@@ -17,8 +20,8 @@ public class AuthorizationController : ControllerBase
     [HttpGet]
     [ApiVersion("1.0")]
 
-    public IActionResult Index([FromQuery] int a)
+    public IActionResult GetList()
     {
-        return Ok(a);
+        return Ok();
     }
 }

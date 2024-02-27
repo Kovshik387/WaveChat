@@ -6,7 +6,7 @@ public class AppLogger : IAppLogger
 {
     private readonly Serilog.ILogger logger;
 
-    private string _systemName = "WaveChat";
+    private string _systemName = "WaveChatAuthorization";
 
     public AppLogger(Serilog.ILogger logger)
     {
