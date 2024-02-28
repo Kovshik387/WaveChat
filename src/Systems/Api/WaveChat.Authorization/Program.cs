@@ -5,6 +5,8 @@ using WaveChat.Services.Logger;
 using WaveChat.Services.Settings;
 using WaveChat.Settings;
 using WaveChat.Context;
+using WaveChat.Context.Setup;
+using WaveChat.Context.Seeder.Seeds;
 
 var mainSettings = Settings.Load<MainSettings>("Main");
 var logSettings = Settings.Load<LogSettings>("Log");
@@ -21,7 +23,6 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddAppAutoMappers();
 builder.Services.AddAppValidator();
-
 
 builder.Services.AddAppVersioning();
 builder.Services.AddAppSwagger(mainSettings,swaggerSettings,identitySettings);
@@ -40,5 +41,8 @@ app.UseAppCors();
 app.UseAppHealthChecks();
 app.UseAppSwagger();
 app.UseAppControllerAndViews();
+
+DbInitializer.Execute(app.Services);
+//DbSeeder.Execute(app.Services);
 
 app.Run();

@@ -27,7 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\WaveChat.Context.Seeder\WaveChat.Context.Seeder.csproj" />
     <ProjectReference Include="..\..\..\Data\Contex\WaveChat.Context\WaveChat.Context.csproj" />
+    <ProjectReference Include="..\..\..\Data\Migrations\WaveChat.Context.Migrations.PgSql\WaveChat.Context.Migrations.PgSql.csproj" />
     <ProjectReference Include="..\..\..\Services\WaveChat.Services.Logger\WaveChat.Services.Logger.csproj" />
     <ProjectReference Include="..\..\..\Services\WaveChat.Services.Settings\WaveChat.Services.Settings.csproj" />
     <ProjectReference Include="..\..\..\Shared\WaveChat.Common.csproj" />
@@ -35,7 +37,6 @@
 
   <ItemGroup>
     <Folder Include="docs\" />
-    <Folder Include="Styles\" />
   </ItemGroup>
 
   <ItemGroup>

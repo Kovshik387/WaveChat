@@ -2,6 +2,7 @@
 
 using WaveChat.Services.Logger;
 using WaveChat.Services.Settings;
+using WaveChat.Context.Seeder;
 
 public static class Bootstrapper
 {
@@ -11,6 +12,7 @@ public static class Bootstrapper
             .AddLogSettings()
             .AddAppLogger()
             .AddSwaggerSettings()
+            //.AddDbSeeder()
             ;
 
         return service;
