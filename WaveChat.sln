@@ -48,7 +48,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Context.Migrations
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Context.Migrations.MySql", "src\Data\Migrations\WaveChat.Context.Migrations.MySql\WaveChat.Context.Migrations.MySql.csproj", "{50BDF5A3-B10B-4DC5-B2CE-48F4098A3B07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaveChat.Context.Seeder", "WaveChat.Context.Seeder\WaveChat.Context.Seeder.csproj", "{30C7432C-C17B-43CE-A88E-9EAA6E25C097}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Context.Seeder", "src\Data\WaveChat.Context.Seeder\WaveChat.Context.Seeder.csproj", "{67EDF508-7E1C-46BC-A733-E1CB73578315}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Services.Authorization", "src\Services\WaveChat.Services.Authorization\WaveChat.Services.Authorization.csproj", "{84881F3E-A53B-4D44-BBB8-2AB8BC4D8D8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -96,10 +98,14 @@ Global
 		{50BDF5A3-B10B-4DC5-B2CE-48F4098A3B07}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50BDF5A3-B10B-4DC5-B2CE-48F4098A3B07}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{50BDF5A3-B10B-4DC5-B2CE-48F4098A3B07}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30C7432C-C17B-43CE-A88E-9EAA6E25C097}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30C7432C-C17B-43CE-A88E-9EAA6E25C097}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30C7432C-C17B-43CE-A88E-9EAA6E25C097}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30C7432C-C17B-43CE-A88E-9EAA6E25C097}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67EDF508-7E1C-46BC-A733-E1CB73578315}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67EDF508-7E1C-46BC-A733-E1CB73578315}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67EDF508-7E1C-46BC-A733-E1CB73578315}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67EDF508-7E1C-46BC-A733-E1CB73578315}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84881F3E-A53B-4D44-BBB8-2AB8BC4D8D8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84881F3E-A53B-4D44-BBB8-2AB8BC4D8D8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84881F3E-A53B-4D44-BBB8-2AB8BC4D8D8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84881F3E-A53B-4D44-BBB8-2AB8BC4D8D8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,7 +130,8 @@ Global
 		{0B1F2BE6-BD3D-4E3D-BBB9-7728FC882C1A} = {4591EE5D-1F29-40A1-A340-2B9535EA36B1}
 		{95AD606D-C2A6-499E-8438-8600D844D7FD} = {4591EE5D-1F29-40A1-A340-2B9535EA36B1}
 		{50BDF5A3-B10B-4DC5-B2CE-48F4098A3B07} = {4591EE5D-1F29-40A1-A340-2B9535EA36B1}
-		{30C7432C-C17B-43CE-A88E-9EAA6E25C097} = {0EA3813A-2CCD-4F43-9E1C-60B5C9EC7176}
+		{67EDF508-7E1C-46BC-A733-E1CB73578315} = {0EA3813A-2CCD-4F43-9E1C-60B5C9EC7176}
+		{84881F3E-A53B-4D44-BBB8-2AB8BC4D8D8D} = {A7B1A2A0-8EC4-4BD6-9E22-DD228A7E718B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8C0635F-FE64-4F91-8B78-5E65A73CCAC8}
