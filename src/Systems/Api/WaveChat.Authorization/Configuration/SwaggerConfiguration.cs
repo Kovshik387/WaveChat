@@ -151,7 +151,6 @@ public static class SwaggerConfiguration
                             mainSettings!.PublicUrl + $"/docs/{description.GroupName}/api.json",
                             description.GroupName.ToUpperInvariant())
                 );
-                options.InjectStylesheet("../assets/css/theme-flattop.css");
                 options.DocExpansion(DocExpansion.List);
                 options.DefaultModelsExpandDepth(-1);
                 options.OAuthAppName(AppTitle);

@@ -10,11 +10,11 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Systems/Api/WaveChat.Authorization/WaveChat.Authorization.csproj", "src/Systems/Api/WaveChat.Authorization/"]
-COPY ["WaveChat.Context.Seeder/WaveChat.Context.Seeder.csproj", "WaveChat.Context.Seeder/"]
 COPY ["src/Data/Contex/WaveChat.Context/WaveChat.Context.csproj", "src/Data/Contex/WaveChat.Context/"]
 COPY ["src/Shared/WaveChat.Common.csproj", "src/Shared/"]
 COPY ["src/Data/WaveChat.Context.Entities/WaveChat.Context.Entities.csproj", "src/Data/WaveChat.Context.Entities/"]
 COPY ["src/Data/Migrations/WaveChat.Context.Migrations.PgSql/WaveChat.Context.Migrations.PgSql.csproj", "src/Data/Migrations/WaveChat.Context.Migrations.PgSql/"]
+COPY ["src/Data/WaveChat.Context.Seeder/WaveChat.Context.Seeder.csproj", "src/Data/WaveChat.Context.Seeder/"]
 COPY ["src/Services/WaveChat.Services.Logger/WaveChat.Services.Logger.csproj", "src/Services/WaveChat.Services.Logger/"]
 COPY ["src/Services/WaveChat.Services.Settings/WaveChat.Services.Settings.csproj", "src/Services/WaveChat.Services.Settings/"]
 RUN dotnet restore "./src/Systems/Api/WaveChat.Authorization/WaveChat.Authorization.csproj"

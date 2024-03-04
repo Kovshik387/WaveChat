@@ -42,7 +42,7 @@ app.UseAppHealthChecks();
 app.UseAppSwagger();
 app.UseAppControllerAndViews();
 
-DbInitializer.Execute(app.Services);
-//DbSeeder.Execute(app.Services);
+//DbInitializer.Execute(app.Services);
+DbSeeder.Execute(app.Services);
 
 app.Run();
