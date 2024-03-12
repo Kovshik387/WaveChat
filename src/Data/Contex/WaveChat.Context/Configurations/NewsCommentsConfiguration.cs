@@ -14,11 +14,11 @@ public static class NewsCommentsConfiguration
     {
         modelBuilder.Entity<Newscomment>(entity =>
         {
-            entity.HasKey(e => e.Idcomment).HasName("newscomments_pkey");
+            entity.HasKey(e => e.Id).HasName("newscomments_pkey");
 
             entity.ToTable("newscomments");
 
-            entity.Property(e => e.Idcomment).HasColumnName("idcomment");
+            entity.Property(e => e.Id).HasColumnName("idcomment");
             entity.Property(e => e.Commentdate).HasColumnName("commentdate");
             entity.Property(e => e.Content).HasColumnName("content");
             entity.Property(e => e.Idnew).HasColumnName("idnew");

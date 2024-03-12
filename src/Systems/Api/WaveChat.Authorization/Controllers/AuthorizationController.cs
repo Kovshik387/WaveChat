@@ -1,30 +1,44 @@
 ﻿using Asp.Versioning;
-using Castle.Core.Logging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using WaveChat.Context;
+using WaveChat.Services.Authorization.Data.DTO;
+using WaveChat.Services.Authorization.Infastructure;
+using WaveChat.Services.Authorization.Services;
 using WaveChat.Services.Logger;
 
 namespace WaveChat.Authorization.Controllers;
 
 [ApiController]
 [Route("v{version:apiVersion}/[Controller]/[Action]")]
-public class AuthorizationController(IAppLogger appLogger, IDbContextFactory<CorporateMessengerContext> dbContext) : ControllerBase
+public class AuthorizationController(IAppLogger appLogger, IAuthorizationService authorizationService)
+    //, HttpClient httpClient) 
+    : ControllerBase
 {
     private IAppLogger _logger = appLogger;
-    private IDbContextFactory<CorporateMessengerContext> _dbContext = dbContext;
-    
+    private IAuthorizationService _authorizationService = authorizationService;
+    //private HttpClient _httpClient = httpClient;
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
+    [HttpPost]
+    [ApiVersion("1.0")]
+    public async Task<IActionResult> SignUp([FromQuery] SignUpDTO model)
+    {
+        if (!ModelState.IsValid) { BadRequest(); }
+        _ = await _authorizationService.SignUpAsync(model);
+        return Ok();
+    }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
     [HttpGet]
     [ApiVersion("1.0")]
-    public async Task<IActionResult> GetList()
+    public async Task<IActionResult> SignIn([FromQuery] SignInDTO model)
     {
-        using var context = await _dbContext.CreateDbContextAsync();
-        var list = await context.Rolestypes.Select(x => x.Rolename).ToListAsync();
-        return Ok(list);
+        return Ok(await _authorizationService.SignInAsync(model));
     }
 }

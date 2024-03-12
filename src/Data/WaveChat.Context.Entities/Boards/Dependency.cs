@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using WaveChat.Context.Entities.Commons;
 using WaveChat.Context.Entities.Users;
 
 namespace WaveChat.Context.Entities.Boards;
 
-public partial class Dependency
+public partial class Dependency : EntityBase
 {
-    public int Iddependency { get; set; }
-
     public int Idboard { get; set; }
 
-    public int Iduser { get; set; }
+    public Guid Iduser { get; set; }
 
     public virtual Board IdboardNavigation { get; set; } = null!;
 

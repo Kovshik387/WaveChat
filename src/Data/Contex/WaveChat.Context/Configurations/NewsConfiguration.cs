@@ -15,11 +15,11 @@ public static class NewsConfiguration
     {
         modelBuilder.Entity<News>(entity =>
         {
-            entity.HasKey(e => e.Idnew).HasName("news_pkey");
+            entity.HasKey(e => e.Id).HasName("news_pkey");
 
             entity.ToTable("news");
 
-            entity.Property(e => e.Idnew).HasColumnName("idnew");
+            entity.Property(e => e.Id).HasColumnName("idnew");
             entity.Property(e => e.Content).HasColumnName("content");
             entity.Property(e => e.Likes)
                 .HasDefaultValue(0)

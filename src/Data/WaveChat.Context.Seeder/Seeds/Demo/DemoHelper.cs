@@ -11,15 +11,15 @@ public class DemoHelper
 {
     public IEnumerable<Rolestype> GetRoles = new List<Rolestype>
     {
-        new Rolestype()
-        {
-            Idroletype = 1,
-            Rolename = "Работник"
-        },
-        new Rolestype()
-        {
-            Idroletype = 2,
-            Rolename = "Старший программист"
-        }
+        //new Rolestype()
+        //{
+        //    Id = 1,
+        //    Rolename = "Работник"
+        //},
+        //new Rolestype()
+        //{
+        //    Id = 2,
+        //    Rolename = "Старший программист"
+        //}
     };
 }

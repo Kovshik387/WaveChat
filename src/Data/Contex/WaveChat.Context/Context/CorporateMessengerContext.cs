@@ -7,19 +7,15 @@ using WaveChat.Context.Entities.DashBoard;
 using WaveChat.Context.Entities.Users;
 using WaveChat.Context.Entities;
 using WaveChat.Context.Configurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace WaveChat.Context;
 
-public partial class CorporateMessengerContext : DbContext
+public partial class CorporateMessengerContext : IdentityDbContext<User,IdentityRole<Guid>,Guid>
 {
-    public CorporateMessengerContext()
-    {
-    }
-
     public CorporateMessengerContext(DbContextOptions<CorporateMessengerContext> options)
-        : base(options)
-    {
-    }
+        : base(options){ }
 
     public virtual DbSet<Board> Boards { get; set; }
 
@@ -41,11 +37,13 @@ public partial class CorporateMessengerContext : DbContext
 
     public virtual DbSet<Statusboard> Statusboards { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
+    //public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<Userschannel> Userschannels { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
         modelBuilder.ConfigureBoard();
         modelBuilder.ConfigureChannel();
         modelBuilder.ConfigureDependency();
@@ -58,9 +56,5 @@ public partial class CorporateMessengerContext : DbContext
         modelBuilder.ConfigureUsersChannels();
         modelBuilder.ConfigureStatusBoard();
         modelBuilder.ConfigureChannelType();
-
-        OnModelCreatingPartial(modelBuilder);
     }
-
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

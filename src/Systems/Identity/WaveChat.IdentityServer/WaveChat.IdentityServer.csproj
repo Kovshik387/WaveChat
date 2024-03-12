@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>9043fc1d-169a-44cb-9b75-92172b62dd17</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..\..</DockerfileContext>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Duende.IdentityServer" Version="7.0.1" />
+		<PackageReference Include="Duende.IdentityServer.AspNetIdentity" Version="7.0.1" />
+		<PackageReference Include="Duende.IdentityServer.EntityFramework" Version="7.0.1" />
+		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
+		<PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+		<PackageReference Include="Serilog.Enrichers.CorrelationId" Version="3.0.1" />
+		<PackageReference Include="Serilog.Expressions" Version="4.0.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.2" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\Data\Contex\WaveChat.Context\WaveChat.Context.csproj" />
+	  <ProjectReference Include="..\..\..\Services\WaveChat.Services.Settings\WaveChat.Services.Settings.csproj" />
+	  <ProjectReference Include="..\..\..\Shared\WaveChat.Common.csproj" />
+	</ItemGroup>
+
+</Project>

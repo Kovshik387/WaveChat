@@ -15,6 +15,7 @@ COPY ["src/Shared/WaveChat.Common.csproj", "src/Shared/"]
 COPY ["src/Data/WaveChat.Context.Entities/WaveChat.Context.Entities.csproj", "src/Data/WaveChat.Context.Entities/"]
 COPY ["src/Data/Migrations/WaveChat.Context.Migrations.PgSql/WaveChat.Context.Migrations.PgSql.csproj", "src/Data/Migrations/WaveChat.Context.Migrations.PgSql/"]
 COPY ["src/Data/WaveChat.Context.Seeder/WaveChat.Context.Seeder.csproj", "src/Data/WaveChat.Context.Seeder/"]
+COPY ["src/Services/WaveChat.Services.Authorization/WaveChat.Services.Authorization.csproj", "src/Services/WaveChat.Services.Authorization/"]
 COPY ["src/Services/WaveChat.Services.Logger/WaveChat.Services.Logger.csproj", "src/Services/WaveChat.Services.Logger/"]
 COPY ["src/Services/WaveChat.Services.Settings/WaveChat.Services.Settings.csproj", "src/Services/WaveChat.Services.Settings/"]
 RUN dotnet restore "./src/Systems/Api/WaveChat.Authorization/WaveChat.Authorization.csproj"

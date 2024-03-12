@@ -52,6 +52,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Context.Seeder", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Services.Authorization", "src\Services\WaveChat.Services.Authorization\WaveChat.Services.Authorization.csproj", "{84881F3E-A53B-4D44-BBB8-2AB8BC4D8D8D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{A0F74D9D-56DB-4A2A-AA81-6FA8650AF577}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.IdentityServer", "src\Systems\Identity\WaveChat.IdentityServer\WaveChat.IdentityServer.csproj", "{6A6B7739-8E55-4551-88CA-A00CB0BA8146}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +110,10 @@ Global
 		{84881F3E-A53B-4D44-BBB8-2AB8BC4D8D8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84881F3E-A53B-4D44-BBB8-2AB8BC4D8D8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84881F3E-A53B-4D44-BBB8-2AB8BC4D8D8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A6B7739-8E55-4551-88CA-A00CB0BA8146}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A6B7739-8E55-4551-88CA-A00CB0BA8146}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A6B7739-8E55-4551-88CA-A00CB0BA8146}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A6B7739-8E55-4551-88CA-A00CB0BA8146}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -132,6 +140,8 @@ Global
 		{50BDF5A3-B10B-4DC5-B2CE-48F4098A3B07} = {4591EE5D-1F29-40A1-A340-2B9535EA36B1}
 		{67EDF508-7E1C-46BC-A733-E1CB73578315} = {0EA3813A-2CCD-4F43-9E1C-60B5C9EC7176}
 		{84881F3E-A53B-4D44-BBB8-2AB8BC4D8D8D} = {A7B1A2A0-8EC4-4BD6-9E22-DD228A7E718B}
+		{A0F74D9D-56DB-4A2A-AA81-6FA8650AF577} = {12982C0F-DDF5-49DC-896A-092A36F533A5}
+		{6A6B7739-8E55-4551-88CA-A00CB0BA8146} = {A0F74D9D-56DB-4A2A-AA81-6FA8650AF577}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8C0635F-FE64-4F91-8B78-5E65A73CCAC8}

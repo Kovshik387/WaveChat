@@ -14,11 +14,11 @@ public static class ChannelTypeConfiguration
     {
         modelBuilder.Entity<Channelstype>(entity =>
         {
-            entity.HasKey(e => e.Idchanneltype).HasName("channelstypes_pkey");
+            entity.HasKey(e => e.Id).HasName("channelstypes_pkey");
 
             entity.ToTable("channelstypes");
 
-            entity.Property(e => e.Idchanneltype).HasColumnName("idchanneltype");
+            entity.Property(e => e.Id).HasColumnName("idchanneltype");
             entity.Property(e => e.Idchannel).HasColumnName("idchannel");
             entity.Property(e => e.Typename)
                 .HasMaxLength(20)

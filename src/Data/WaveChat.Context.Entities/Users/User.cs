@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using WaveChat.Context.Entities.Boards;
 using WaveChat.Context.Entities.Messages;
 using WaveChat.Context.Entities.DashBoard;
+using Microsoft.AspNetCore.Identity;
+using WaveChat.Context.Entities.Commons;
 
 namespace WaveChat.Context.Entities.Users;
 
-public partial class User
+public partial class User : IdentityUser<Guid>
 {
-    public int Iduser { get; set; }
+    //public int Iduser { get; set; }
 
     public string Name { get; set; } = null!;
 
@@ -16,11 +18,11 @@ public partial class User
 
     public string? Lastname { get; set; }
 
-    public string Username { get; set; } = null!;
+    //public string Username { get; set; } = null!;
 
-    public string Email { get; set; } = null!;
+    //public string Email { get; set; } = null!;
 
-    public string Passwordhash { get; set; } = null!;
+    //public string Passwordhash { get; set; } = null!;
 
     public DateOnly Registrationdate { get; set; }
 

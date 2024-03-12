@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using WaveChat.Context.Entities.Commons;
 
 namespace WaveChat.Context.Entities.DashBoard;
 
-public partial class News
+public partial class News : EntityBase
 {
-    public int Idnew { get; set; }
-
     public string Title { get; set; } = null!;
 
     public string Content { get; set; } = null!;

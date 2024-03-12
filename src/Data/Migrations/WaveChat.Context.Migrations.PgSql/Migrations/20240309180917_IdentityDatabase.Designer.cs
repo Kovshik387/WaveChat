@@ -12,8 +12,8 @@ using WaveChat.Context;
 namespace WaveChat.Context.Migrations.PgSql.Migrations
 {
     [DbContext(typeof(CorporateMessengerContext))]
-    [Migration("20240228162542_InitDatabase")]
-    partial class InitDatabase
+    [Migration("20240309180917_IdentityDatabase")]
+    partial class IdentityDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,14 +28,144 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("user_roles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("user_role_claims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("user_claims", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("user_logins", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("user_role_owners", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("user_tokens", (string)null);
+                });
+
             modelBuilder.Entity("WaveChat.Context.Entities.Boards.Board", b =>
                 {
-                    b.Property<int>("Idboard")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("idboard");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Idboard"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -56,12 +186,18 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("title");
 
-                    b.Property<int>("Userboard")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("Userboard")
+                        .HasColumnType("uuid")
                         .HasColumnName("userboard");
 
-                    b.HasKey("Idboard")
+                    b.HasKey("Id")
                         .HasName("boards_pkey");
+
+                    b.HasIndex("Uid")
+                        .IsUnique();
 
                     b.HasIndex("Userboard");
 
@@ -70,39 +206,45 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
 
             modelBuilder.Entity("WaveChat.Context.Entities.Boards.Dependency", b =>
                 {
-                    b.Property<int>("Iddependency")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("iddependency");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Iddependency"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Idboard")
                         .HasColumnType("integer")
                         .HasColumnName("idboard");
 
-                    b.Property<int>("Iduser")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("Iduser")
+                        .HasColumnType("uuid")
                         .HasColumnName("iduser");
 
-                    b.HasKey("Iddependency")
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
                         .HasName("dependencies_pkey");
 
                     b.HasIndex("Idboard");
 
                     b.HasIndex("Iduser");
 
+                    b.HasIndex("Uid")
+                        .IsUnique();
+
                     b.ToTable("dependencies", (string)null);
                 });
 
             modelBuilder.Entity("WaveChat.Context.Entities.Boards.Statusboard", b =>
                 {
-                    b.Property<int>("Idstatusboard")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("idstatusboard");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Idstatusboard"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -110,20 +252,26 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("status");
 
-                    b.HasKey("Idstatusboard")
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
                         .HasName("statusboards_pkey");
+
+                    b.HasIndex("Uid")
+                        .IsUnique();
 
                     b.ToTable("statusboards", (string)null);
                 });
 
             modelBuilder.Entity("WaveChat.Context.Entities.DashBoard.News", b =>
                 {
-                    b.Property<int>("Idnew")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("idnew");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Idnew"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -142,20 +290,26 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasColumnType("character varying(200)")
                         .HasColumnName("title");
 
-                    b.HasKey("Idnew")
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
                         .HasName("news_pkey");
+
+                    b.HasIndex("Uid")
+                        .IsUnique();
 
                     b.ToTable("news", (string)null);
                 });
 
             modelBuilder.Entity("WaveChat.Context.Entities.DashBoard.Newscomment", b =>
                 {
-                    b.Property<int>("Idcomment")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("idcomment");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Idcomment"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateOnly>("Commentdate")
                         .HasColumnType("date")
@@ -170,28 +324,34 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("idnew");
 
-                    b.Property<int>("Iduser")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("Iduser")
+                        .HasColumnType("uuid")
                         .HasColumnName("iduser");
 
-                    b.HasKey("Idcomment")
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
                         .HasName("newscomments_pkey");
 
                     b.HasIndex("Idnew");
 
                     b.HasIndex("Iduser");
 
+                    b.HasIndex("Uid")
+                        .IsUnique();
+
                     b.ToTable("newscomments", (string)null);
                 });
 
             modelBuilder.Entity("WaveChat.Context.Entities.Messages.Channel", b =>
                 {
-                    b.Property<int>("Idchannel")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("idchannel");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Idchannel"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -199,20 +359,26 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasColumnType("character varying(50)")
                         .HasColumnName("name");
 
-                    b.HasKey("Idchannel")
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
                         .HasName("channels_pkey");
+
+                    b.HasIndex("Uid")
+                        .IsUnique();
 
                     b.ToTable("channels", (string)null);
                 });
 
             modelBuilder.Entity("WaveChat.Context.Entities.Messages.Channelstype", b =>
                 {
-                    b.Property<int>("Idchanneltype")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("idchanneltype");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Idchanneltype"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("Idchannel")
                         .HasColumnType("integer")
@@ -223,22 +389,28 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasColumnType("character varying(20)")
                         .HasColumnName("typename");
 
-                    b.HasKey("Idchanneltype")
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
                         .HasName("channelstypes_pkey");
 
                     b.HasIndex("Idchannel");
+
+                    b.HasIndex("Uid")
+                        .IsUnique();
 
                     b.ToTable("channelstypes", (string)null);
                 });
 
             modelBuilder.Entity("WaveChat.Context.Entities.Messages.Message", b =>
                 {
-                    b.Property<int>("Idmessage")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("idmessage");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Idmessage"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -249,8 +421,8 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("idchannel");
 
-                    b.Property<int>("Iduser")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("Iduser")
+                        .HasColumnType("uuid")
                         .HasColumnName("iduser");
 
                     b.Property<bool>("Isread")
@@ -263,45 +435,57 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasColumnType("date")
                         .HasColumnName("senddate");
 
-                    b.HasKey("Idmessage")
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
                         .HasName("message_pkey");
 
                     b.HasIndex("Idchannel");
 
                     b.HasIndex("Iduser");
 
+                    b.HasIndex("Uid")
+                        .IsUnique();
+
                     b.ToTable("message", (string)null);
                 });
 
             modelBuilder.Entity("WaveChat.Context.Entities.Messages.Userschannel", b =>
                 {
-                    b.Property<int>("Iduserchannel")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("iduserchannel");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Iduserchannel"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("Channelid")
                         .HasColumnType("integer")
                         .HasColumnName("channelid");
 
-                    b.HasKey("Iduserchannel")
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
                         .HasName("userschannels_pkey");
 
                     b.HasIndex("Channelid");
+
+                    b.HasIndex("Uid")
+                        .IsUnique();
 
                     b.ToTable("userschannels", (string)null);
                 });
 
             modelBuilder.Entity("WaveChat.Context.Entities.Photo", b =>
                 {
-                    b.Property<int>("Idphoto")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("idphoto");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Idphoto"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Bucket")
                         .IsRequired()
@@ -325,8 +509,8 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("idnew");
 
-                    b.Property<int?>("Iduser")
-                        .HasColumnType("integer")
+                    b.Property<Guid?>("Iduser")
+                        .HasColumnType("uuid")
                         .HasColumnName("iduser");
 
                     b.Property<string>("Image")
@@ -335,7 +519,10 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("image");
 
-                    b.HasKey("Idphoto")
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
                         .HasName("photos_pkey");
 
                     b.HasIndex("Idboard");
@@ -348,43 +535,58 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
 
                     b.HasIndex("Iduser");
 
+                    b.HasIndex("Uid")
+                        .IsUnique();
+
                     b.ToTable("photos", (string)null);
                 });
 
             modelBuilder.Entity("WaveChat.Context.Entities.Users.Rolestype", b =>
                 {
-                    b.Property<int>("Idroletype")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("idroletype");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Idroletype"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Rolename")
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("rolename");
 
-                    b.HasKey("Idroletype")
+                    b.Property<Guid>("Uid")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id")
                         .HasName("rolestypes_pkey");
+
+                    b.HasIndex("Uid")
+                        .IsUnique();
 
                     b.ToTable("rolestypes", (string)null);
                 });
 
             modelBuilder.Entity("WaveChat.Context.Entities.Users.User", b =>
                 {
-                    b.Property<int>("Iduser")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("iduser");
+                        .HasColumnType("uuid");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Iduser"));
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("email");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Lastname")
                         .HasMaxLength(50)
@@ -395,17 +597,34 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasColumnType("date")
                         .HasColumnName("lastvisitdate");
 
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("name");
 
-                    b.Property<string>("Passwordhash")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("character varying(250)")
-                        .HasColumnName("passwordhash");
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean");
 
                     b.Property<DateOnly>("Registrationdate")
                         .HasColumnType("date")
@@ -415,24 +634,85 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("roletype");
 
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)")
                         .HasColumnName("surname");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)")
-                        .HasColumnName("username");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean");
 
-                    b.HasKey("Iduser")
-                        .HasName("users_pkey");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
 
                     b.HasIndex("Roletype");
 
                     b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
+                {
+                    b.HasOne("WaveChat.Context.Entities.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
+                {
+                    b.HasOne("WaveChat.Context.Entities.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WaveChat.Context.Entities.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.HasOne("WaveChat.Context.Entities.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WaveChat.Context.Entities.Boards.Board", b =>

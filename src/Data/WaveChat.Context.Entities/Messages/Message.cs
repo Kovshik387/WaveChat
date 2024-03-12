@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using WaveChat.Context.Entities.Commons;
 using WaveChat.Context.Entities.Users;
 
 namespace WaveChat.Context.Entities.Messages;
 
-public partial class Message
+public partial class Message : EntityBase
 {
-    public int Idmessage { get; set; }
-
     public DateOnly Senddate { get; set; }
 
     public bool Isread { get; set; }
@@ -16,7 +15,7 @@ public partial class Message
 
     public int Idchannel { get; set; }
 
-    public int Iduser { get; set; }
+    public Guid Iduser { get; set; }
 
     public virtual Channel IdchannelNavigation { get; set; } = null!;
 

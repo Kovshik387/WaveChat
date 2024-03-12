@@ -14,11 +14,11 @@ public static class StatusBoardConfiguration
     {
         modelBuilder.Entity<Statusboard>(entity =>
         {
-            entity.HasKey(e => e.Idstatusboard).HasName("statusboards_pkey");
+            entity.HasKey(e => e.Id).HasName("statusboards_pkey");
 
             entity.ToTable("statusboards");
 
-            entity.Property(e => e.Idstatusboard).HasColumnName("idstatusboard");
+            entity.Property(e => e.Id).HasColumnName("idstatusboard");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .HasColumnName("status");

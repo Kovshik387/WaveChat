@@ -13,11 +13,11 @@ public static class MessageConfiguration
     public static void ConfigureMessage(this ModelBuilder modelBuilder) {
         modelBuilder.Entity<Message>(entity =>
         {
-            entity.HasKey(e => e.Idmessage).HasName("message_pkey");
+            entity.HasKey(e => e.Id).HasName("message_pkey");
 
             entity.ToTable("message");
 
-            entity.Property(e => e.Idmessage).HasColumnName("idmessage");
+            entity.Property(e => e.Id).HasColumnName("idmessage");
             entity.Property(e => e.Content).HasColumnName("content");
             entity.Property(e => e.Idchannel).HasColumnName("idchannel");
             entity.Property(e => e.Iduser).HasColumnName("iduser");

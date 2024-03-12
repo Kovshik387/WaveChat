@@ -13,6 +13,7 @@
 
   <ItemGroup>
 	<PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="7.1.0" />
+	<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.2">
 	  <PrivateAssets>all</PrivateAssets>
 	  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -30,6 +31,7 @@
     <ProjectReference Include="..\..\..\Data\Contex\WaveChat.Context\WaveChat.Context.csproj" />
     <ProjectReference Include="..\..\..\Data\Migrations\WaveChat.Context.Migrations.PgSql\WaveChat.Context.Migrations.PgSql.csproj" />
     <ProjectReference Include="..\..\..\Data\WaveChat.Context.Seeder\WaveChat.Context.Seeder.csproj" />
+    <ProjectReference Include="..\..\..\Services\WaveChat.Services.Authorization\WaveChat.Services.Authorization.csproj" />
     <ProjectReference Include="..\..\..\Services\WaveChat.Services.Logger\WaveChat.Services.Logger.csproj" />
     <ProjectReference Include="..\..\..\Services\WaveChat.Services.Settings\WaveChat.Services.Settings.csproj" />
     <ProjectReference Include="..\..\..\Shared\WaveChat.Common.csproj" />

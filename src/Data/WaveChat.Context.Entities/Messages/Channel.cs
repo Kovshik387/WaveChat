@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using WaveChat.Context.Entities.Commons;
 
 namespace WaveChat.Context.Entities.Messages;
 
-public partial class Channel
+public partial class Channel : EntityBase
 {
-    public int Idchannel { get; set; }
-
     public string Name { get; set; } = null!;
 
     public virtual ICollection<Channelstype> Channelstypes { get; set; } = new List<Channelstype>();

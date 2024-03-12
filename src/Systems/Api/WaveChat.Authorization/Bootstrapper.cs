@@ -2,19 +2,22 @@
 
 using WaveChat.Services.Logger;
 using WaveChat.Services.Settings;
-using WaveChat.Context.Seeder;
+using WaveChat.Services.Authorization;
+using WaveChat.Authorization.Configuration;
 
 public static class Bootstrapper
 {
-    public static IServiceCollection RegisterService(this IServiceCollection service)
+    public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration = null)
     {
-        service.AddMainSettings()
+        services.AddMainSettings()
             .AddLogSettings()
+            .AddIdentitySettings()
             .AddAppLogger()
             .AddSwaggerSettings()
+            .AddUserAccountService()
             //.AddDbSeeder()
             ;
 
-        return service;
+        return services;
     }
 }

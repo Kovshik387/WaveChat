@@ -16,11 +16,11 @@ namespace WaveChat.Context.Configurations
 
             modelBuilder.Entity<Rolestype>(entity =>
             {
-                entity.HasKey(e => e.Idroletype).HasName("rolestypes_pkey");
+                entity.HasKey(e => e.Id).HasName("rolestypes_pkey");
 
                 entity.ToTable("rolestypes");
 
-                entity.Property(e => e.Idroletype).HasColumnName("idroletype");
+                entity.Property(e => e.Id).HasColumnName("idroletype");
                 entity.Property(e => e.Rolename)
                     .HasMaxLength(100)
                     .HasColumnName("rolename");

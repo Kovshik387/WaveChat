@@ -14,11 +14,11 @@ public static class UsersChannelsConfiguration
     {
         modelBuilder.Entity<Userschannel>(entity =>
         {
-            entity.HasKey(e => e.Iduserchannel).HasName("userschannels_pkey");
+            entity.HasKey(e => e.Id).HasName("userschannels_pkey");
 
             entity.ToTable("userschannels");
 
-            entity.Property(e => e.Iduserchannel).HasColumnName("iduserchannel");
+            entity.Property(e => e.Id).HasColumnName("iduserchannel");
             entity.Property(e => e.Channelid).HasColumnName("channelid");
 
             entity.HasOne(d => d.Channel).WithMany(p => p.Userschannels)

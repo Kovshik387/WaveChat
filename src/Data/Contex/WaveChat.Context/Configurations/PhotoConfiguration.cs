@@ -13,11 +13,11 @@ public static class PhotoConfiguration
     public static void ConfigurePhoto(this ModelBuilder modelBuilder) {
         modelBuilder.Entity<Photo>(entity =>
         {
-            entity.HasKey(e => e.Idphoto).HasName("photos_pkey");
+            entity.HasKey(e => e.Id).HasName("photos_pkey");
 
             entity.ToTable("photos");
 
-            entity.Property(e => e.Idphoto).HasColumnName("idphoto");
+            entity.Property(e => e.Id).HasColumnName("idphoto");
             entity.Property(e => e.Bucket)
                 .HasMaxLength(100)
                 .HasColumnName("bucket");

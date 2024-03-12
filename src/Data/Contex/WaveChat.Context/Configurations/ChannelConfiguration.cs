@@ -14,11 +14,11 @@ namespace WaveChat.Context.Configurations
         {
             modelBuilder.Entity<Channel>(entity =>
             {
-                entity.HasKey(e => e.Idchannel).HasName("channels_pkey");
+                entity.HasKey(e => e.Id).HasName("channels_pkey");
 
                 entity.ToTable("channels");
 
-                entity.Property(e => e.Idchannel).HasColumnName("idchannel");
+                entity.Property(e => e.Id).HasColumnName("idchannel");
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .HasColumnName("name");

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using WaveChat.Context.Entities.Commons;
 using WaveChat.Context.Entities.Users;
 
 namespace WaveChat.Context.Entities.Boards;
 
-public partial class Board
+public partial class Board : EntityBase
 {
-    public int Idboard { get; set; }
-
     public string Title { get; set; } = null!;
 
     public string Content { get; set; } = null!;
@@ -16,7 +15,7 @@ public partial class Board
 
     public DateOnly Deadlinedate { get; set; }
 
-    public int Userboard { get; set; }
+    public Guid Userboard { get; set; }
 
     public virtual ICollection<Dependency> Dependencies { get; set; } = new List<Dependency>();
 

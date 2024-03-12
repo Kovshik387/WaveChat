@@ -4,18 +4,17 @@ using WaveChat.Context.Entities.Boards;
 using WaveChat.Context.Entities.Messages;
 using WaveChat.Context.Entities.Users;
 using WaveChat.Context.Entities.DashBoard;
+using WaveChat.Context.Entities.Commons;
 
 namespace WaveChat.Context.Entities;
 
-public partial class Photo
+public partial class Photo : EntityBase
 {
-    public int Idphoto { get; set; }
-
     public string Image { get; set; } = null!;
 
     public string Bucket { get; set; } = null!;
 
-    public int? Iduser { get; set; }
+    public Guid? Iduser { get; set; }
 
     public int? Idboard { get; set; }
 

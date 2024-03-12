@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using WaveChat.Context.Entities.Commons;
 
 namespace WaveChat.Context.Entities.Boards;
 
-public partial class Statusboard
+public partial class Statusboard : EntityBase
 {
-    public int Idstatusboard { get; set; }
-
     public string Status { get; set; } = null!;
 }

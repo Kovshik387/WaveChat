@@ -15,11 +15,11 @@ namespace WaveChat.Context.Configurations
         {
             modelBuilder.Entity<Board>(entity =>
             {
-                entity.HasKey(e => e.Idboard).HasName("boards_pkey");
+                entity.HasKey(e => e.Id).HasName("boards_pkey");
 
                 entity.ToTable("boards");
 
-                entity.Property(e => e.Idboard).HasColumnName("idboard");
+                entity.Property(e => e.Id).HasColumnName("idboard");
                 entity.Property(e => e.Content).HasColumnName("content");
                 entity.Property(e => e.Deadlinedate).HasColumnName("deadlinedate");
                 entity.Property(e => e.Issuedate).HasColumnName("issuedate");

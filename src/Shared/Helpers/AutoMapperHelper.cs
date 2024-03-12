@@ -4,6 +4,7 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using AutoMapper;
 
 public static class AutoMappersRegisterHelper
 {

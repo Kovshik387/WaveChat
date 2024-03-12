@@ -9,11 +9,11 @@ public static class DependencyConfiguration
     {
         modelBuilder.Entity<Dependency>(entity =>
         {
-            entity.HasKey(e => e.Iddependency).HasName("dependencies_pkey");
+            entity.HasKey(e => e.Id).HasName("dependencies_pkey");
 
             entity.ToTable("dependencies");
 
-            entity.Property(e => e.Iddependency).HasColumnName("iddependency");
+            entity.Property(e => e.Id).HasColumnName("iddependency");
             entity.Property(e => e.Idboard).HasColumnName("idboard");
             entity.Property(e => e.Iduser).HasColumnName("iduser");
 
