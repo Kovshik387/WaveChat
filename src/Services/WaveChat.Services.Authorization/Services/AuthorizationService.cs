@@ -1,11 +1,17 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
 using WaveChat.Common.Validator;
 using WaveChat.Context.Entities.Users;
 using WaveChat.Services.Authorization.Data.DTO;
 using WaveChat.Services.Authorization.Data.Responses;
 using WaveChat.Services.Authorization.Infastructure;
+using WaveChat.Services.Authorization.Services.Validators;
+using WaveChat.Services.Settings;
+using WaveChat.Settings;
 
 namespace WaveChat.Services.Authorization.Services;
 /// <summary>
@@ -13,28 +19,57 @@ namespace WaveChat.Services.Authorization.Services;
 /// </summary>
 /// <param name="mapper"></param>
 /// <param name="context"></param>
-public class AuthorizationService(IMapper mapper, UserManager<User> userManager)
-    //IModelValidator<SignUpValidator> modelValidator)
+public class AuthorizationService(IMapper mapper, UserManager<User> userManager,
+    IModelValidator<SignUpDTO> modelValidator, IdentitySettings identity)
     : IAuthorizationService
 {
     private readonly IMapper _mapper = mapper;
     private readonly UserManager<User> _userManager = userManager;
-    //private readonly IModelValidator<SignUpValidator> _modelValidator = modelValidator;
+    private readonly IModelValidator<SignUpDTO> _modelValidator = modelValidator;
+    private readonly IdentitySettings _identity = identity;  
     public async Task<bool> IsEmptyAsync()
     {
        return !(await _userManager.Users.AnyAsync());
     }
 
-    public async Task<AuthorizationResponse> SignInAsync(SignInDTO model)
+    public async Task<AuthenticationResponse> SignInAsync(SignInDTO model)
     {
-        var user = await _userManager.FindByEmailAsync(model.UserName);
+        // TO DO скрыть
+        //var url = $"http://host.docker.internal:5026/connect/token";
+        var url = _identity.Url;
+        var request_body = new[]
+        {
+            new KeyValuePair<string, string>("grant_type", "password"),
+            new KeyValuePair<string, string>("client_id", "frontend"),
+            new KeyValuePair<string, string>("client_secret", "A3F0811F2E934C4F1114CB693F7D785E"),
+            new KeyValuePair<string, string>("username", model.UserName),
+            new KeyValuePair<string, string>("password", model.Password!)
+        };
+        
+        var requestContent = new FormUrlEncodedContent(request_body);
 
-        return _mapper.Map<AuthorizationResponse>(model);
+        var httpClient = new HttpClient() { BaseAddress = new Uri("http://localhost:8080")};
+
+        var response = await httpClient.PostAsync(url, requestContent);
+
+        var content = await response.Content.ReadAsStringAsync();
+
+        var result = JsonSerializer.Deserialize<AuthenticationResponse>(content, 
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true}) ?? new AuthenticationResponse();
+
+        result.Successful = response.IsSuccessStatusCode;
+
+        if (!response.IsSuccessStatusCode)
+        {
+            return result;
+        }
+
+        return _mapper.Map<AuthenticationResponse>(result);
     }
 
     public async Task<AuthorizationResponse> SignUpAsync(SignUpDTO model)
     {
-        //_modelValidator.Check(model);
+        _modelValidator.Check(model);
 
         var user = await _userManager.FindByEmailAsync(model.Email);
         

@@ -18,7 +18,7 @@ public interface IAuthorizationService
     /// </summary>
     /// <param name="signIn"></param>
     /// <returns></returns>
-    Task<AuthorizationResponse> SignInAsync(SignInDTO signIn);
+    Task<AuthenticationResponse> SignInAsync(SignInDTO signIn);
     /// <summary>
     /// Регистрация нового пользователя
     /// </summary>

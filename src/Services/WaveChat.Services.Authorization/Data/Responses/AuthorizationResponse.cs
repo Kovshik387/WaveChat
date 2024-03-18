@@ -11,5 +11,4 @@ public class AuthorizationResponse //<T>
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    //public T Data { get; set; } = default(T)!;
 }

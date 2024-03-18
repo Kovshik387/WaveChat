@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\Contex\WaveChat.Context\WaveChat.Context.csproj" />
     <ProjectReference Include="..\..\Data\WaveChat.Context.Entities\WaveChat.Context.Entities.csproj" />
+    <ProjectReference Include="..\WaveChat.Services.Settings\WaveChat.Services.Settings.csproj" />
   </ItemGroup>
 
 </Project>
