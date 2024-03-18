@@ -8,7 +8,7 @@ public static class HealthCheckConfiguration
     public static IServiceCollection AddAppHealthChecks(this IServiceCollection services)
     {
         services.AddHealthChecks()
-            .AddCheck<SelfHealthCheck>("WaveChat.API");
+            .AddCheck<SelfHealthCheck>("WaveChat.Authorization");
 
         return services;
     }

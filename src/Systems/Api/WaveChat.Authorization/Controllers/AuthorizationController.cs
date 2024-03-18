@@ -1,6 +1,7 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using WaveChat.Context;
 using WaveChat.Services.Authorization.Data.DTO;
 using WaveChat.Services.Authorization.Infastructure;
@@ -17,6 +18,7 @@ public class AuthorizationController(IAppLogger appLogger, IAuthorizationService
 {
     private IAppLogger _logger = appLogger;
     private IAuthorizationService _authorizationService = authorizationService;
+    //private IDbContextFactory<CorporateMessengerContext> _dbContextFactory = dbContext;
     //private HttpClient _httpClient = httpClient;
     /// <summary>
     /// 
@@ -27,8 +29,8 @@ public class AuthorizationController(IAppLogger appLogger, IAuthorizationService
     public async Task<IActionResult> SignUp([FromQuery] SignUpDTO model)
     {
         if (!ModelState.IsValid) { BadRequest(); }
-        _ = await _authorizationService.SignUpAsync(model);
-        return Ok();
+        var result = await _authorizationService.SignUpAsync(model);
+        return Ok(result);
     }
     /// <summary>
     /// 

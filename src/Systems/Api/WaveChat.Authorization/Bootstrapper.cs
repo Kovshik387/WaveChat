@@ -15,7 +15,6 @@ public static class Bootstrapper
             .AddAppLogger()
             .AddSwaggerSettings()
             .AddUserAccountService()
-            //.AddDbSeeder()
             ;
 
         return services;
