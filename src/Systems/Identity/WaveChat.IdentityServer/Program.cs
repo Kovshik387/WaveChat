@@ -5,9 +5,9 @@ using WaveChat.IdentityServer.Configuration;
 using WaveChat.Services.Settings;
 using WaveChat.Settings;
 
-var builder = WebApplication.CreateBuilder(args);
-
 var logSettings = Settings.Load<LogSettings>("Log");
+
+var builder = WebApplication.CreateBuilder(args);
 
 builder.AddAppLogger(logSettings);
 

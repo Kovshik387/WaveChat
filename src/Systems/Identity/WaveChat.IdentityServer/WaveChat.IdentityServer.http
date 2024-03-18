@@ -1,6 +1,6 @@
 @WaveChat.IdentityServer_HostAddress = http://localhost:5205
 
-GET {{WaveChat.IdentityServer_HostAddress}}/weatherforecast/
+GET {{WaveChat.IdentityServer_HostAddress}}/health/
 Accept: application/json
 
 ###

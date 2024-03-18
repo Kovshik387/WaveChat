@@ -12,7 +12,7 @@ public static class IS4Configuration
         services
             .AddIdentity<User, IdentityRole<Guid>>(opt =>
             {
-                opt.Password.RequiredLength = 6;
+                opt.Password.RequiredLength = 0;
                 opt.Password.RequireDigit = false;
                 opt.Password.RequireLowercase = false;
                 opt.Password.RequireUppercase = false;
