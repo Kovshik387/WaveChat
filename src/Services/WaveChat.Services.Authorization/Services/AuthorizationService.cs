@@ -20,12 +20,14 @@ namespace WaveChat.Services.Authorization.Services;
 /// <param name="mapper"></param>
 /// <param name="context"></param>
 public class AuthorizationService(IMapper mapper, UserManager<User> userManager,
-    IModelValidator<SignUpDTO> modelValidator, IdentitySettings identity)
+    IModelValidator<SignUpDTO> signUpValidator,  IModelValidator<SignInDTO> signInValidator,
+    IdentitySettings identity)
     : IAuthorizationService
 {
     private readonly IMapper _mapper = mapper;
     private readonly UserManager<User> _userManager = userManager;
-    private readonly IModelValidator<SignUpDTO> _modelValidator = modelValidator;
+    private readonly IModelValidator<SignUpDTO> _modelValidator = signUpValidator;
+    private readonly IModelValidator<SignInDTO> _signInValidator = signInValidator;
     private readonly IdentitySettings _identity = identity;  
     public async Task<bool> IsEmptyAsync()
     {
@@ -34,9 +36,11 @@ public class AuthorizationService(IMapper mapper, UserManager<User> userManager,
 
     public async Task<AuthenticationResponse> SignInAsync(SignInDTO model)
     {
+        _signInValidator.Check(model);
+
         // TO DO скрыть
-        //var url = $"http://host.docker.internal:5026/connect/token";
-        var url = _identity.Url;
+        var url = $"http://host.docker.internal:5026/connect/token";
+        //var url = _identity.Url;
         var request_body = new[]
         {
             new KeyValuePair<string, string>("grant_type", "password"),

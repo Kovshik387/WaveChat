@@ -26,19 +26,23 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
  
-  identity:
-   image: ${DOCKER_REGISTRY-}wavechat-identity-server
-   container_name: wavechat-identity-server
-   build:
-     context: .
-     dockerfile: /src/Systems/Identity/WaveChat.IdentityServer/Dockerfile
-   networks: 
-      - wavechat-dev
-   ports:
-      - "5026:8080"
-   depends_on:
-      - postgres_db
-      - authorization_service
+  # identity:
+  #  image: ${DOCKER_REGISTRY-}wavechat-identity-server
+  #  container_name: wavechat-identity-server
+  #  build:
+  #    context: .
+  #    dockerfile: /src/Systems/Identity/WaveChat.IdentityServer/Dockerfile
+  #  networks: 
+  #     - wavechat-dev
+  #  ports:
+  #     - "5026:8080"
+  #  environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #  volumes:
+  #     - ~/.aspnet/https:/https:ro
+  #  depends_on:
+  #     - postgres_db
+  #     - authorization_service
 
   authorization_service:
     image: ${DOCKER_REGISTRY-}wavechat-authorization
@@ -51,10 +55,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-     - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ~/.aspnet/https:/https:ro
     depends_on:
       - postgres_db
     # env_file:

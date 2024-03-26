@@ -13,7 +13,7 @@ builder.AddAppLogger(logSettings);
 
 var services = builder.Services;
 
-//services.AddAppCors();
+services.AddAppCors();
 
 services.AddHttpContextAccessor();
 
@@ -27,8 +27,7 @@ services.AddIS4();
 // Configure the HTTP request pipeline.
 
 var app = builder.Build();
-
-//app.UseAppCors();
+app.UseAppCors();
 
 app.UseAppHealthChecks();
 

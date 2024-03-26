@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -7,6 +8,7 @@ using WaveChat.Services.Authorization.Data.DTO;
 using WaveChat.Services.Authorization.Infastructure;
 using WaveChat.Services.Authorization.Services;
 using WaveChat.Services.Logger;
+using IAuthorizationService = WaveChat.Services.Authorization.Infastructure.IAuthorizationService;
 
 namespace WaveChat.Authorization.Controllers;
 
@@ -42,5 +44,13 @@ public class AuthorizationController(IAppLogger appLogger, IAuthorizationService
     public async Task<IActionResult> SignIn([FromQuery] SignInDTO model)
     {
         return Ok(await _authorizationService.SignInAsync(model));
+    }
+
+    [HttpGet]
+    [ApiVersion("1.0")]
+    [Authorize]
+    public async Task<IActionResult> Logout()
+    {
+        return Ok();
     }
 }

@@ -32,7 +32,7 @@ builder.Services.AddAppAuth(identitySettings);
 builder.Services.AddAppVersioning();
 builder.Services.AddAppSwagger(mainSettings,swaggerSettings,identitySettings);
 
-builder.Services.AddAppCors();
+//builder.Services.AddAppCors();
 builder.Services.AddAppControllerAndViews();
 builder.Services.AddAppHealthChecks();
 
@@ -41,7 +41,7 @@ var app = builder.Build();
 app.UseStaticFiles();
 
 app.UseAppAuth();
-app.UseAppCors();
+//app.UseAppCors();
 app.UseAppHealthChecks();
 app.UseAppSwagger();
 app.UseAppControllerAndViews();
