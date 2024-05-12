@@ -15,7 +15,7 @@ public partial class Message : EntityBase
 
     public int Idchannel { get; set; }
 
-    public Guid Iduser { get; set; }
+    public int Iduser { get; set; }
 
     public virtual Channel IdchannelNavigation { get; set; } = null!;
 

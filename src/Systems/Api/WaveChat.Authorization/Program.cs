@@ -11,7 +11,7 @@ using WaveChat.Services.Authorization;
 var mainSettings = Settings.Load<MainSettings>("Main");
 var logSettings = Settings.Load<LogSettings>("Log");
 var swaggerSettings = Settings.Load<SwaggerSettings>("Swagger");
-var identitySettings = Settings.Load<IdentitySettings>("Identity");
+var identitySettings = Settings.Load<AuthSettings>("Identity");
 
 var builder = WebApplication.CreateBuilder(args);
 

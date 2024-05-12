@@ -13,7 +13,7 @@ public partial class Newscomment : EntityBase
 
     public int Idnew { get; set; }
 
-    public Guid Iduser { get; set; }
+    public int Iduser { get; set; }
 
     public virtual News IdnewNavigation { get; set; } = null!;
 

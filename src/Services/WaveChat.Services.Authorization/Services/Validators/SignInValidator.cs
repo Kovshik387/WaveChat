@@ -7,7 +7,7 @@ public class SignInValidator : AbstractValidator<SignInDTO>
 {
     public SignInValidator()
     {
-        RuleFor(x => x.UserName).NotEmpty().WithMessage("Empty username");
+        RuleFor(x => x.Email).NotEmpty().WithMessage("Empty email");
         RuleFor(x => x.Password).NotEmpty().WithMessage("Empty password");
     }
 }

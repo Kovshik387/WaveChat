@@ -4,6 +4,7 @@ using WaveChat.Services.Logger;
 using WaveChat.Services.Settings;
 using WaveChat.Services.Authorization;
 using WaveChat.Authorization.Configuration;
+using WaveChat.Services.Authorization.Infastructure;
 
 public static class Bootstrapper
 {
@@ -14,6 +15,7 @@ public static class Bootstrapper
             .AddIdentitySettings()
             .AddAppLogger()
             .AddSwaggerSettings()
+            .AddAppJwt()
             .AddUserAccountService()
             ;
 

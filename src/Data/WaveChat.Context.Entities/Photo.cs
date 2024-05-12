@@ -14,7 +14,7 @@ public partial class Photo : EntityBase
 
     public string Bucket { get; set; } = null!;
 
-    public Guid? Iduser { get; set; }
+    public int Iduser { get; set; }
 
     public int? Idboard { get; set; }
 

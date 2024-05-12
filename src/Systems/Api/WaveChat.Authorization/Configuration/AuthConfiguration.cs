@@ -3,59 +3,32 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
-using WaveChat.Common.Security;
 using WaveChat.Context.Entities.Users;
 using WaveChat.Context;
 using WaveChat.Services.Settings;
-using IdentityServer4.AccessTokenValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Text;
 
 public static class AuthConfiguration
 {
-    public static IServiceCollection AddAppAuth(this IServiceCollection services, IdentitySettings settings)
+    public static IServiceCollection AddAppAuth(this IServiceCollection services, AuthSettings settings)
     {
-        IdentityModelEventSource.ShowPII = true;
-
-        services
-            .AddIdentity<User, IdentityRole<Guid>>(opt =>
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
-                opt.Password.RequiredLength = 0;
-                opt.Password.RequireDigit = false;
-                opt.Password.RequireLowercase = false;
-                opt.Password.RequireUppercase = false;
-                opt.Password.RequireNonAlphanumeric = false;
-            })
-            .AddEntityFrameworkStores<CorporateMessengerContext>()
-            .AddUserManager<UserManager<User>>()
-            .AddDefaultTokenProviders();
-
-        services.AddAuthentication(options =>
-        {
-            options.DefaultScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-            options.DefaultAuthenticateScheme = IdentityServerAuthenticationDefaults.AuthenticationScheme;
-        })
-            .AddJwtBearer(IdentityServerAuthenticationDefaults.AuthenticationScheme, options =>
-            {
-                options.RequireHttpsMetadata = settings.Url.StartsWith("https://");
-                options.Authority = settings.Url;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = false,
-                    ValidateIssuer = false,
+                    ValidateIssuer = true,
+                    ValidIssuer = "Api",
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = settings.SymmetricSecurityKeyAccess,
                     ValidateAudience = false,
                     RequireExpirationTime = true,
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
                 };
-                options.Audience = "api";
+                options.Audience = "Authorization_Api";;
             });
-
-
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy(AppScopes.BooksRead, policy => policy.RequireClaim("scope", AppScopes.BooksRead));
-            options.AddPolicy(AppScopes.BooksWrite, policy => policy.RequireClaim("scope", AppScopes.BooksWrite));
-        });
 
         return services;
     }

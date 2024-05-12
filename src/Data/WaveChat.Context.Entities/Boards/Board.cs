@@ -15,7 +15,7 @@ public partial class Board : EntityBase
 
     public DateOnly Deadlinedate { get; set; }
 
-    public Guid Userboard { get; set; }
+    public int Userboard { get; set; }
 
     public virtual ICollection<Dependency> Dependencies { get; set; } = new List<Dependency>();
 

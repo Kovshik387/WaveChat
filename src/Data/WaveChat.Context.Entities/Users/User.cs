@@ -8,22 +8,19 @@ using WaveChat.Context.Entities.Commons;
 
 namespace WaveChat.Context.Entities.Users;
 
-public partial class User : IdentityUser<Guid>
+public partial class User : EntityBase
 {
-    //public int Iduser { get; set; }
-
     public string Name { get; set; } = null!;
 
     public string Surname { get; set; } = null!;
 
     public string? Lastname { get; set; }
 
-    //public string Username { get; set; } = null!;
+    public string Username { get; set; } = null!;
 
-    //public string Email { get; set; } = null!;
-
-    //public string Passwordhash { get; set; } = null!;
-
+    public string Email { get; set; } = null!;
+    public string Passwordhash { get; set; } = null!;
+    public string RefreshToken { get; set; } = null!;
     public DateOnly Registrationdate { get; set; }
 
     public DateOnly Lastvisitdate { get; set; }

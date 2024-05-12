@@ -7,7 +7,6 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Reflection;
 using Asp.Versioning.ApiExplorer;
-using WaveChat.Common.Security;
 
 public static class SwaggerConfiguration
 {
@@ -22,7 +21,7 @@ public static class SwaggerConfiguration
     public static IServiceCollection AddAppSwagger(this IServiceCollection services,
         MainSettings mainSettings,
         SwaggerSettings swaggerSettings,
-        IdentitySettings identitySettings
+        AuthSettings identitySettings
         )
     {
         if (!swaggerSettings.Enabled)
@@ -56,37 +55,12 @@ public static class SwaggerConfiguration
             if (File.Exists(xmlPath))
                 options.IncludeXmlComments(xmlPath);
 
-
-
-            options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Name = "Bearer",
-                Type = SecuritySchemeType.OAuth2,
-                Scheme = "oauth2",
-                BearerFormat = "JWT",
                 In = ParameterLocation.Header,
-                Flows = new OpenApiOAuthFlows
-                {
-                    ClientCredentials = new OpenApiOAuthFlow
-                    {
-                        TokenUrl = new Uri($"{identitySettings.Url}/connect/token"),
-                        Scopes = new Dictionary<string, string>
-                        {
-                            { AppScopes.BooksRead, "Read" },
-                            { AppScopes.BooksWrite, "Write" }
-                        }
-                    },
-
-                    Password = new OpenApiOAuthFlow
-                    {
-                        TokenUrl = new Uri($"{identitySettings.Url}/connect/token"),
-                        Scopes = new Dictionary<string, string>
-                        {
-                            { AppScopes.BooksRead, "Read" },
-                            { AppScopes.BooksWrite, "Write" }
-                        }
-                    }
-                }
+                Description = "Please insert JWT with Bearer into field",
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey
             });
 
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -97,7 +71,7 @@ public static class SwaggerConfiguration
                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.SecurityScheme,
-                            Id = "oauth2"
+                            Id = "Bearer"
                         }
                     },
                     new List<string>()

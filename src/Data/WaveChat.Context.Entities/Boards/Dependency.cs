@@ -9,7 +9,7 @@ public partial class Dependency : EntityBase
 {
     public int Idboard { get; set; }
 
-    public Guid Iduser { get; set; }
+    public int Iduser { get; set; }
 
     public virtual Board IdboardNavigation { get; set; } = null!;
 

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WaveChat.Services.Authorization.Data.DTO;
+﻿using WaveChat.Services.Authorization.Data.DTO;
 using WaveChat.Services.Authorization.Data.Responses;
 
 namespace WaveChat.Services.Authorization.Infastructure;
@@ -18,13 +13,13 @@ public interface IAuthorizationService
     /// </summary>
     /// <param name="signIn"></param>
     /// <returns></returns>
-    Task<AuthenticationResponse> SignInAsync(SignInDTO signIn);
+    public Task<AuthResponse<AuthDTO>> SignInAsync(SignInDTO model);
     /// <summary>
     /// Регистрация нового пользователя
     /// </summary>
     /// <param name="signUp"></param>
     /// <returns></returns>
-    Task<AuthorizationResponse> SignUpAsync(SignUpDTO signUp);
+    public Task<AuthResponse<AuthDTO>> SignUpAsync(SignUpDTO model);
     /// <summary>
     /// Проверка на наличие пользователей в БД 
     /// </summary>

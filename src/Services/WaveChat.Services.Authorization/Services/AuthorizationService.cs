@@ -1,104 +1,130 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using WaveChat.Common.Validator;
+using WaveChat.Context;
 using WaveChat.Context.Entities.Users;
 using WaveChat.Services.Authorization.Data.DTO;
 using WaveChat.Services.Authorization.Data.Responses;
 using WaveChat.Services.Authorization.Infastructure;
-using WaveChat.Services.Authorization.Services.Validators;
-using WaveChat.Services.Settings;
-using WaveChat.Settings;
 
 namespace WaveChat.Services.Authorization.Services;
 /// <summary>
-/// Реализация интферейса <see cref="IAuthorizationService"/> аутентификации
+/// Реализация интерфейса <see cref="IAuthorizationService"/> аутентификации
 /// </summary>
 /// <param name="mapper"></param>
 /// <param name="context"></param>
-public class AuthorizationService(IMapper mapper, UserManager<User> userManager,
-    IModelValidator<SignUpDTO> signUpValidator,  IModelValidator<SignInDTO> signInValidator,
-    IdentitySettings identity)
+public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpValidator, 
+    IValidator<SignInDTO> signInValidator, CorporateMessengerContext context, IJwtUtils jwtUtils)
     : IAuthorizationService
 {
     private readonly IMapper _mapper = mapper;
-    private readonly UserManager<User> _userManager = userManager;
-    private readonly IModelValidator<SignUpDTO> _modelValidator = signUpValidator;
-    private readonly IModelValidator<SignInDTO> _signInValidator = signInValidator;
-    private readonly IdentitySettings _identity = identity;  
+    private readonly IValidator<SignUpDTO> _signUpValidator = signUpValidator;
+    private readonly IValidator<SignInDTO> _signInValidator = signInValidator;
+    private readonly CorporateMessengerContext _context = context;
+    private readonly IJwtUtils _jwtUtils = jwtUtils;
     public async Task<bool> IsEmptyAsync()
     {
-       return !(await _userManager.Users.AnyAsync());
+        return !(await _context.Users.AnyAsync());
     }
 
-    public async Task<AuthenticationResponse> SignInAsync(SignInDTO model)
+    public async Task<AuthResponse<AuthDTO>> SignInAsync(SignInDTO model)
     {
-        _signInValidator.Check(model);
-
-        // TO DO скрыть
-        var url = $"http://host.docker.internal:5026/connect/token";
-        //var url = _identity.Url;
-        var request_body = new[]
+        var validated = await _signInValidator.ValidateAsync(model);
+        if (!validated.IsValid)
         {
-            new KeyValuePair<string, string>("grant_type", "password"),
-            new KeyValuePair<string, string>("client_id", "frontend"),
-            new KeyValuePair<string, string>("client_secret", "A3F0811F2E934C4F1114CB693F7D785E"),
-            new KeyValuePair<string, string>("username", model.UserName),
-            new KeyValuePair<string, string>("password", model.Password!)
-        };
-        
-        var requestContent = new FormUrlEncodedContent(request_body);
-
-        var httpClient = new HttpClient() { BaseAddress = new Uri("http://localhost:8080")};
-
-        var response = await httpClient.PostAsync(url, requestContent);
-
-        var content = await response.Content.ReadAsStringAsync();
-
-        var result = JsonSerializer.Deserialize<AuthenticationResponse>(content, 
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true}) ?? new AuthenticationResponse();
-
-        result.Successful = response.IsSuccessStatusCode;
-
-        if (!response.IsSuccessStatusCode)
-        {
-            return result;
+            return new AuthResponse<AuthDTO>()
+            {
+                Data = null,
+                ErrorMessage = validated.Errors.First().ErrorMessage
+            };
         }
 
-        return _mapper.Map<AuthenticationResponse>(result);
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == model.Email.ToUpper());
+
+        if (user is null){
+            return new AuthResponse<AuthDTO>()
+            {
+                Data = null,
+                ErrorMessage = "Invalid email"
+            };
+        }
+
+        if (!BCrypt.Net.BCrypt.Verify(model.Password, user.Passwordhash))
+        {
+            return new AuthResponse<AuthDTO>()
+            {
+                Data = null,
+                ErrorMessage = "Invalid password"
+            };
+        }
+
+        var authResult = _jwtUtils.GenerateJwtToken(user.Uid);
+
+        user.RefreshToken = authResult.RefreshToken;
+        _context.Users.Update(user); await _context.SaveChangesAsync();
+
+        return new AuthResponse<AuthDTO>()
+        {
+            Data = authResult,
+            ErrorMessage = ""
+        };
     }
 
-    public async Task<AuthorizationResponse> SignUpAsync(SignUpDTO model)
+    public async Task<AuthResponse<AuthDTO>> SignUpAsync(SignUpDTO model)
     {
-        _modelValidator.Check(model);
-
-        var user = await _userManager.FindByEmailAsync(model.Email);
-        
-        if (user != null) throw new Exception($"User account with email {model.Email} already exist.");
-
-        user = new User()
+        var validated = await _signUpValidator.ValidateAsync(model);
+        if (!validated.IsValid)
         {
-            Email = model.Email,
-            UserName = model.UserName,
+            return new AuthResponse<AuthDTO>()
+            {
+                Data = null,
+                ErrorMessage = validated.Errors.First().ErrorMessage
+            };
+        }
 
-            PhoneNumber = null,
-            PhoneNumberConfirmed = false,
+        var userExist = await _context.Users.Where(x => x.Email == model.Email).FirstOrDefaultAsync();
 
+        if (userExist != null) return new AuthResponse<AuthDTO>()
+        {
+            Data = null,
+            ErrorMessage = $"User account with email { model.Email } already exist"
+        };
+
+        var userGuid = Guid.NewGuid();
+
+        var token = _jwtUtils.GenerateJwtToken(userGuid);
+        var user = new User()
+        {
+            Uid = userGuid,
+            Username = model.UserName,
+            Email = model.Email.ToUpper(),
+            Passwordhash = BCrypt.Net.BCrypt.HashPassword(model.Password,10),
             Name = model.Name,
             Surname = model.Surname,
             Lastname = model.LastName,
-
+            RefreshToken = token.RefreshToken,
             Registrationdate = DateOnly.FromDateTime(DateTime.UtcNow),
         };
 
-        var result = await _userManager.CreateAsync(user,model.Password);
-        if (!result.Succeeded) 
-            throw new Exception($"Creating user account is wrong. " +
-                $"{string.Join(", ", result.Errors.Select(s => s.Description))}");
+        var result =  await _context.Users.AddAsync(user); await _context.SaveChangesAsync();
 
-        return _mapper.Map<AuthorizationResponse>(user);
+
+        if (result is null)
+            throw new Exception($"Creating user account is wrong. ");
+
+        return new AuthResponse<AuthDTO>()
+        {
+            Data = new AuthDTO()
+            { RefreshToken = token.RefreshToken,
+                AccessToken = token.AccessToken,
+                Id = userGuid
+            },
+            ErrorMessage = ""
+        };
     }
 }

@@ -11,5 +11,8 @@ public static class Bootstrapper
     /// <param name="service"></param>
     /// <returns></returns>
     public static IServiceCollection AddUserAccountService(this IServiceCollection services)
-        => services.AddScoped<IAuthorizationService, AuthorizationService>();
+    {
+        services.AddScoped<IAuthorizationService, AuthorizationService>();
+        return services;
+    }
 }

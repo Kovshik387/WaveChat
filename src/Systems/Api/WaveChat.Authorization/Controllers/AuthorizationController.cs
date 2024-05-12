@@ -15,27 +15,24 @@ namespace WaveChat.Authorization.Controllers;
 [ApiController]
 [Route("v{version:apiVersion}/[Controller]/[Action]")]
 public class AuthorizationController(IAppLogger appLogger, IAuthorizationService authorizationService)
-    //, HttpClient httpClient) 
     : ControllerBase
 {
     private IAppLogger _logger = appLogger;
     private IAuthorizationService _authorizationService = authorizationService;
-    //private IDbContextFactory<CorporateMessengerContext> _dbContextFactory = dbContext;
-    //private HttpClient _httpClient = httpClient;
     /// <summary>
-    /// 
+    /// Регистрация нового пользователя с выдачей access и refresh токенов
     /// </summary>
     /// <returns></returns>
     [HttpPost]
     [ApiVersion("1.0")]
-    public async Task<IActionResult> SignUp([FromQuery] SignUpDTO model)
+    public async Task<IActionResult> SignUp([FromBody] SignUpDTO model)
     {
         if (!ModelState.IsValid) { BadRequest(); }
         var result = await _authorizationService.SignUpAsync(model);
         return Ok(result);
     }
     /// <summary>
-    /// 
+    /// Аутентификация и авторизация пользователя с выдачей access и refresh токенов
     /// </summary>
     /// <param name="model"></param>
     /// <returns></returns>
