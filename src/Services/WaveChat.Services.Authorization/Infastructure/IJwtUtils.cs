@@ -12,4 +12,5 @@ public interface IJwtUtils
 {
     public AuthDTO GenerateJwtToken(Guid guid);
     public string? GetUserByRefreshToken(string refreshToken);
+    public string? GetExpireTime(string refreshToken);
 }

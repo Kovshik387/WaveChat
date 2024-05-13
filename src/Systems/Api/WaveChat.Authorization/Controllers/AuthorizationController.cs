@@ -45,9 +45,16 @@ public class AuthorizationController(IAppLogger appLogger, IAuthorizationService
 
     [HttpGet]
     [ApiVersion("1.0")]
-    [Authorize]
-    public async Task<IActionResult> Logout()
+    public async Task<IActionResult> RefreshAccess(string refreshToken)
     {
-        return Ok();
+        return Ok(await _authorizationService.GetAccessTokenAsync(refreshToken));
+    }
+
+    [HttpDelete]
+    [ApiVersion("1.0")]
+    [Authorize]
+    public async Task<IActionResult> Logout(string refreshToken)
+    {
+        return Ok(await _authorizationService.Logout(refreshToken));
     }
 }

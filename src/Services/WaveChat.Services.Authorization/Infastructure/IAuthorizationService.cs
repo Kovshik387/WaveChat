@@ -25,4 +25,16 @@ public interface IAuthorizationService
     /// </summary>
     /// <returns></returns>
     Task<bool> IsEmptyAsync();
+    /// <summary>
+    /// Выдача нового access-токена
+    /// </summary>
+    /// <param name="refreshToken"></param>
+    /// <returns></returns>
+    public Task<AuthResponse<AuthDTO>> GetAccessTokenAsync(string refreshToken);
+    /// <summary>
+    /// Удаление refresh-токена у пользователя
+    /// </summary>
+    /// <param name="refreshToken"></param>
+    /// <returns></returns>
+    public Task<AuthResponse<object>> Logout(string refreshToken);
 }

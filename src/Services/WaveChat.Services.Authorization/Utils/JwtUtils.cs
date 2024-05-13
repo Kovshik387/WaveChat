@@ -33,7 +33,8 @@ public class JwtUtils(CorporateMessengerContext context, AuthSettings settings, 
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddMinutes(_setting.AccessTokenLifetimeMinutes),
-            Issuer = "Api",
+            Issuer = _setting.Issuer,
+            Audience = _setting.Audience,
             SigningCredentials = new SigningCredentials(_setting.SymmetricSecurityKeyAccess,
                 SecurityAlgorithms.HmacSha256),
         };
@@ -42,7 +43,8 @@ public class JwtUtils(CorporateMessengerContext context, AuthSettings settings, 
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.UtcNow.AddDays(_setting.RefreshTokenLifetimeDays),
-            Issuer = "Api",
+            Issuer = _setting.Issuer,
+            Audience = _setting.Audience,
             SigningCredentials = new SigningCredentials(_setting.SymmetricSecurityKeyRefresh,
                 SecurityAlgorithms.HmacSha256Signature),
         };
@@ -57,7 +59,26 @@ public class JwtUtils(CorporateMessengerContext context, AuthSettings settings, 
         return authDTO;
     }
 
+    public string? GetExpireTime(string refreshToken)
+    {
+        var claims = GetClaimsFromToken(refreshToken);
+        
+        if (claims is null)
+        {
+            return null;
+        }
+
+        return claims.Claims.First(x => x.Type.Equals("exp")).Value;
+    }
+
     public string? GetUserByRefreshToken(string refreshToken)
+    {
+        var claims = GetClaimsFromToken(refreshToken);
+
+        return claims is not null ? claims.Claims.First(x => x.Type.Equals(ClaimTypes.Name)).Value : null;
+    }
+
+    private ClaimsPrincipal? GetClaimsFromToken(string refreshToken)
     {
         var tokenValidationParameters = new TokenValidationParameters()
         {
@@ -71,8 +92,7 @@ public class JwtUtils(CorporateMessengerContext context, AuthSettings settings, 
         var tokenHandler = new JwtSecurityTokenHandler();
         try
         {
-            ClaimsPrincipal claims = tokenHandler.ValidateToken(refreshToken, tokenValidationParameters, out var validatedToken);
-            return claims.Claims.First(x => x.Type.Equals(ClaimTypes.Name)).Value;
+            return tokenHandler.ValidateToken(refreshToken, tokenValidationParameters, out var validatedToken);
         }
         catch (Exception ex)
         {

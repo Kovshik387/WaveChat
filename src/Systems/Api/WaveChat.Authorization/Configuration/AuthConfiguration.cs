@@ -20,14 +20,14 @@ public static class AuthConfiguration
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = "Api",
+                    ValidIssuer = settings.Issuer,
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = settings.SymmetricSecurityKeyAccess,
-                    ValidateAudience = false,
+                    ValidateAudience = true,
+                    ValidAudience = settings.Audience,
                     RequireExpirationTime = true,
                     ValidateLifetime = true,
                 };
-                options.Audience = "Authorization_Api";;
             });
 
         return services;

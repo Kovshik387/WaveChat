@@ -18,7 +18,7 @@ namespace WaveChat.Services.Authorization.Services;
 /// </summary>
 /// <param name="mapper"></param>
 /// <param name="context"></param>
-public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpValidator, 
+public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpValidator, ILogger<AuthorizationService> logger,
     IValidator<SignInDTO> signInValidator, CorporateMessengerContext context, IJwtUtils jwtUtils)
     : IAuthorizationService
 {
@@ -27,6 +27,7 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
     private readonly IValidator<SignInDTO> _signInValidator = signInValidator;
     private readonly CorporateMessengerContext _context = context;
     private readonly IJwtUtils _jwtUtils = jwtUtils;
+    private readonly ILogger<AuthorizationService> _logger = logger;
     public async Task<bool> IsEmptyAsync()
     {
         return !(await _context.Users.AnyAsync());
@@ -50,7 +51,7 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
             return new AuthResponse<AuthDTO>()
             {
                 Data = null,
-                ErrorMessage = "Invalid email"
+                ErrorMessage = "Invalid email."
             };
         }
 
@@ -59,7 +60,7 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
             return new AuthResponse<AuthDTO>()
             {
                 Data = null,
-                ErrorMessage = "Invalid password"
+                ErrorMessage = "Invalid password."
             };
         }
 
@@ -92,7 +93,7 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
         if (userExist != null) return new AuthResponse<AuthDTO>()
         {
             Data = null,
-            ErrorMessage = $"User account with email { model.Email } already exist"
+            ErrorMessage = $"User account with email { model.Email } already exist."
         };
 
         var userGuid = Guid.NewGuid();
@@ -115,7 +116,7 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
 
 
         if (result is null)
-            throw new Exception($"Creating user account is wrong. ");
+            throw new Exception($"Creating user account is wrong.");
 
         return new AuthResponse<AuthDTO>()
         {
@@ -127,4 +128,79 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
             ErrorMessage = ""
         };
     }
+
+    public async Task<AuthResponse<AuthDTO>> GetAccessTokenAsync(string refreshToken)
+    {
+        var idUser = _jwtUtils.GetUserByRefreshToken(refreshToken);
+
+        if (idUser is null)
+        {
+            return new AuthResponse<AuthDTO>()
+            {
+                Data = null,
+                ErrorMessage = "Invalid Refresh Token."
+            };
+        }
+
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Uid == Guid.Parse(idUser));
+
+        if (user is null || user.RefreshToken != refreshToken)
+        {
+            return new AuthResponse<AuthDTO>()
+            {
+                Data = null,
+                ErrorMessage = "Invalid Refresh Token."
+            };
+        }
+
+        var userRefreshToken = refreshToken;
+        var tokens = _jwtUtils.GenerateJwtToken(Guid.Parse(idUser));
+
+        var expireTime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(_jwtUtils.GetExpireTime(refreshToken)!)).UtcDateTime;
+        var span = expireTime - DateTime.UtcNow;
+
+        if (span.Ticks < TimeSpan.TicksPerDay) userRefreshToken = tokens.RefreshToken;
+
+        return new AuthResponse<AuthDTO>()
+        {
+            Data = new AuthDTO()
+            {
+                Id = Guid.Parse(idUser),
+                AccessToken = tokens.AccessToken,
+                RefreshToken = userRefreshToken,
+            },
+            ErrorMessage = ""
+        };
+    }
+
+    public async Task<AuthResponse<object>> Logout(string refreshToken)
+    {
+        var idUser = _jwtUtils.GetUserByRefreshToken(refreshToken);
+        if (idUser is null)
+        {
+            return new AuthResponse<object>()
+            {
+                Data = null,
+                ErrorMessage = "Invalid Refresh Token."
+            };
+        }
+
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Uid == Guid.Parse(idUser));
+        if (user is null || user.RefreshToken != refreshToken)
+        {
+            return new AuthResponse<object>()
+            {
+                Data = null,
+                ErrorMessage = "Invalid Refresh Token."
+            };
+        }
+
+        user.RefreshToken = ""; _context.Users.Update(user);
+        return new AuthResponse<object>
+        {
+            Data = null,
+            ErrorMessage = ""
+        };
+    }
+
 }
