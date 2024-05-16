@@ -10,5 +10,11 @@
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Data\Contex\WaveChat.Context\WaveChat.Context.csproj" />
+    <ProjectReference Include="..\..\Data\WaveChat.Context.Entities\WaveChat.Context.Entities.csproj" />
+    <ProjectReference Include="..\..\Shared\WaveChat.Common.csproj" />
+  </ItemGroup>
     
 </Project>
