@@ -21,6 +21,8 @@ public static class PhotoConfiguration
             entity.Property(e => e.Bucket)
                 .HasMaxLength(100)
                 .HasColumnName("bucket");
+            entity.Property(e => e.IsActive).HasColumnName("IsActive");
+            entity.Property(e => e.IsProfile).HasColumnName("IsProfile");
             entity.Property(e => e.Idboard).HasColumnName("idboard");
             entity.Property(e => e.Idchannel).HasColumnName("idchannel");
             entity.Property(e => e.Idmessage).HasColumnName("idmessage");
@@ -29,7 +31,7 @@ public static class PhotoConfiguration
             entity.Property(e => e.Image)
                 .HasMaxLength(100)
                 .HasColumnName("image");
-
+             
             entity.HasOne(d => d.IdboardNavigation).WithMany(p => p.Photos)
                 .HasForeignKey(d => d.Idboard)
                 .HasConstraintName("photos_idboard_fkey");

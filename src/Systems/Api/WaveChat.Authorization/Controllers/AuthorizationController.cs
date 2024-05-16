@@ -29,6 +29,7 @@ public class AuthorizationController(IAppLogger appLogger, IAuthorizationService
     {
         if (!ModelState.IsValid) { BadRequest(); }
         var result = await _authorizationService.SignUpAsync(model);
+
         return Ok(result);
     }
     /// <summary>
@@ -42,19 +43,29 @@ public class AuthorizationController(IAppLogger appLogger, IAuthorizationService
     {
         return Ok(await _authorizationService.SignInAsync(model));
     }
-
+    /// <summary>
+    /// Выдача нового access-токена
+    /// </summary>
+    /// <param name="refreshToken"></param>
+    /// <returns></returns>
     [HttpGet]
     [ApiVersion("1.0")]
     public async Task<IActionResult> RefreshAccess(string refreshToken)
     {
+        if (!ModelState.IsValid) { BadRequest(); }
         return Ok(await _authorizationService.GetAccessTokenAsync(refreshToken));
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="refreshToken"></param>
+    /// <returns></returns>
     [HttpDelete]
     [ApiVersion("1.0")]
     [Authorize]
     public async Task<IActionResult> Logout(string refreshToken)
     {
+        if (!ModelState.IsValid) { BadRequest(); }
         return Ok(await _authorizationService.Logout(refreshToken));
     }
 }

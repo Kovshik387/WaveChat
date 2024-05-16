@@ -386,6 +386,12 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasColumnType("character varying(100)")
                         .HasColumnName("image");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsProfile")
+                        .HasColumnType("boolean");
+
                     b.Property<Guid>("Uid")
                         .HasColumnType("uuid");
 
@@ -471,7 +477,8 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
 
                     b.Property<string>("RefreshToken")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("RefreshToken");
 
                     b.Property<DateOnly>("Registrationdate")
                         .HasColumnType("date")

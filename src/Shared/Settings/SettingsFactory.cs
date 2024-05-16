@@ -1,4 +1,4 @@
-﻿namespace WaveChat.Settings;
+﻿namespace WaveChat.Common.Settings;
 
 using Microsoft.Extensions.Configuration;
 

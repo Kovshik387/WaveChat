@@ -16,6 +16,10 @@ public partial class Photo : EntityBase
 
     public int Iduser { get; set; }
 
+    public bool IsActive { get; set; } = false;
+
+    public bool IsProfile {  get; set; } = false;
+
     public int? Idboard { get; set; }
 
     public int? Idnew { get; set; }
