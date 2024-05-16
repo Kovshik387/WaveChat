@@ -8,7 +8,7 @@ public static class Bootstrapper
 {
     public static IServiceCollection AddAppDbContext(this IServiceCollection services, IConfiguration configuration = null)
     {
-        var settings = WaveChat.Settings.Settings.Load<DbSettings>("Database", configuration);
+        var settings = WaveChat.Common.Settings.Settings.Load<DbSettings>("Database", configuration);
         services.AddSingleton(settings);
         
         var dbInitDelegate = DbContextOptionsFactory.Configure(settings.ConnectionString, settings.DatabaseType, true);

@@ -1,7 +1,7 @@
 using WaveChat.Authorization.Configuration;
 using WaveChat.Services.Logger;
 using WaveChat.Services.Settings;
-using WaveChat.Settings;
+using WaveChat.Common.Settings;
 using WaveChat.Context;
 using WaveChat.Context.Setup;
 using WaveChat.Api.Configuration;
@@ -32,7 +32,7 @@ builder.Services.AddAppAuth(identitySettings);
 builder.Services.AddAppVersioning();
 builder.Services.AddAppSwagger(mainSettings,swaggerSettings,identitySettings);
 
-//builder.Services.AddAppCors();
+builder.Services.AddAppCors();
 builder.Services.AddAppControllerAndViews();
 builder.Services.AddAppHealthChecks();
 
@@ -41,12 +41,12 @@ var app = builder.Build();
 app.UseStaticFiles();
 
 app.UseAppAuth();
-//app.UseAppCors();
+app.UseAppCors();
 app.UseAppHealthChecks();
 app.UseAppSwagger();
 app.UseAppControllerAndViews();
 
 DbInitializer.Execute(app.Services);
-//DbSeeder.Execute(app.Services);
+
 
 app.Run();

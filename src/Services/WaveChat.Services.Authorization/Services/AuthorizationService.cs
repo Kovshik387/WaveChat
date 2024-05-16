@@ -19,7 +19,7 @@ namespace WaveChat.Services.Authorization.Services;
 /// <param name="mapper"></param>
 /// <param name="context"></param>
 public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpValidator, ILogger<AuthorizationService> logger,
-    IValidator<SignInDTO> signInValidator, CorporateMessengerContext context, IJwtUtils jwtUtils)
+    IValidator<SignInDTO> signInValidator, IConnectionWithStorageApi connectionWithStorageApi, CorporateMessengerContext context, IJwtUtils jwtUtils)
     : IAuthorizationService
 {
     private readonly IMapper _mapper = mapper;
@@ -28,6 +28,7 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
     private readonly CorporateMessengerContext _context = context;
     private readonly IJwtUtils _jwtUtils = jwtUtils;
     private readonly ILogger<AuthorizationService> _logger = logger;
+    private readonly IConnectionWithStorageApi _connection = connectionWithStorageApi;
     public async Task<bool> IsEmptyAsync()
     {
         return !(await _context.Users.AnyAsync());
@@ -93,7 +94,15 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
         if (userExist != null) return new AuthResponse<AuthDTO>()
         {
             Data = null,
-            ErrorMessage = $"User account with email { model.Email } already exist."
+            ErrorMessage = $"User account with email {model.Email} already exist."
+        };
+
+        var userName = await _context.Users.Where(x => x.Username == model.UserName).FirstOrDefaultAsync();
+
+        if (userName != null) return new AuthResponse<AuthDTO>()
+        {
+            Data = null,
+            ErrorMessage = $"User account with username {model.UserName} already exist."
         };
 
         var userGuid = Guid.NewGuid();
@@ -104,7 +113,7 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
             Uid = userGuid,
             Username = model.UserName,
             Email = model.Email.ToUpper(),
-            Passwordhash = BCrypt.Net.BCrypt.HashPassword(model.Password,10),
+            Passwordhash = BCrypt.Net.BCrypt.HashPassword(model.Password, 10),
             Name = model.Name,
             Surname = model.Surname,
             Lastname = model.LastName,
@@ -113,7 +122,6 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
         };
 
         var result =  await _context.Users.AddAsync(user); await _context.SaveChangesAsync();
-
 
         if (result is null)
             throw new Exception($"Creating user account is wrong.");
@@ -153,13 +161,7 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
             };
         }
 
-        var userRefreshToken = refreshToken;
         var tokens = _jwtUtils.GenerateJwtToken(Guid.Parse(idUser));
-
-        var expireTime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(_jwtUtils.GetExpireTime(refreshToken)!)).UtcDateTime;
-        var span = expireTime - DateTime.UtcNow;
-
-        if (span.Ticks < TimeSpan.TicksPerDay) userRefreshToken = tokens.RefreshToken;
 
         return new AuthResponse<AuthDTO>()
         {
@@ -167,7 +169,7 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
             {
                 Id = Guid.Parse(idUser),
                 AccessToken = tokens.AccessToken,
-                RefreshToken = userRefreshToken,
+                RefreshToken = tokens.RefreshToken,
             },
             ErrorMessage = ""
         };
@@ -195,7 +197,7 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
             };
         }
 
-        user.RefreshToken = ""; _context.Users.Update(user);
+        user.RefreshToken = ""; _context.Users.Update(user); await _context.SaveChangesAsync();
         return new AuthResponse<object>
         {
             Data = null,

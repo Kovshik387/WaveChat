@@ -8,4 +8,8 @@ public static class GuidExtension
     {
         return guid.ToString().Replace("-", "").Replace(" ", "");
     }
+    public static bool Equals(this Guid guid, string stringGuid)
+    {
+        return guid.ToString() == stringGuid;
+    }
 }
