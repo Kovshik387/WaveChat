@@ -2,7 +2,6 @@ import Footer from "@components/Footer";
 import HeaderNavigation from "@components/Header";
 import SignInPage from "@pages/Authorization/SignIn";
 import SignUpPage from "@pages/Authorization/SignUp";
-import ChatPage from "@pages/ChatPage";
 import MainPage from "@pages/MainPage";
 import * as ReactRouter from "react-router-dom";
 
@@ -21,10 +20,6 @@ export default function App(){
     {
       path: "/signUp",
       element: <SignUpPage/>
-    },
-    {
-      path: "/chat/:chat",
-      element: <ChatPage/>
     }
 	]);
 	return (

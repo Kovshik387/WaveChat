@@ -1,4 +1,4 @@
-export type Message = {
+export type MessageInfo = {
     content: string,
     userId: string,
     chatId: string
