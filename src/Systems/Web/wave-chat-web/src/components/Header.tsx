@@ -1,41 +1,29 @@
-import CheckToken from "@functions/CheckToken";
+
+import RequestExecuter from "@functions/RequestExecuter";
 import { Navbar,Container,Nav} from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 
 export type HeaderProps = {
   state: [string, React.Dispatch<React.SetStateAction<string>>]
 }
 
-
-export default function HeaderNavigation(){    
-    async function logout(){
-        console.log('hi');
-        const url = `http://localhost:8010/v1/Authorization/Logout?refreshToken=${localStorage.getItem("refreshToken")}`;
-        const headers = new Headers();
-        headers.set("Authorization","Bearer "+localStorage.getItem("accessToken"));
-        headers.set('Content-Type','application/json');
-        headers.set('accept',"*/*");
-        headers.set('Access-Control-Allow-Origin', '*');
-        try{
-            await fetch(url,{method: 'DELETE',headers: headers});
-        }
-        catch(error){
-            await CheckToken();
-            await fetch(`http://localhost:8010/v1/Authorization/Logout?refreshToken=${localStorage.getItem("refreshToken")}`,{method: 'DELETE',headers: headers});
-        }
-
+export default function HeaderNavigation(){      
+  
+  async function logout() : Promise<Response>{
+      const url = `http://localhost:8010/v1/Authorization/Logout?refreshToken=${localStorage.getItem("refreshToken")}`;
+      const headers = new Headers();
+      headers.set("Authorization","Bearer "+localStorage.getItem("accessToken"));
+      headers.set('Content-Type','application/json');
+      headers.set('accept',"*/*");
+      headers.set('Access-Control-Allow-Origin', '*');
+      const response = await fetch(url,{method: 'DELETE',headers: headers});
+      if (response !== null){
         localStorage.removeItem("id");
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('accessToken');
-        // if (response.status == 401){
-        //     console.log('unath')
-        //     CheckToken();
-        //     await fetch(url,{method: 'DELETE',headers: headers});
-        // }
-        // console.log('complete')
-        // await fetch(url,{method: 'DELETE',headers: headers});
-     }
-  
+      }
+      return response;
+    }
+      
     return (
     <>
         <Navbar bg="dark" data-bs-theme="dark" className="bg-body-tertiary">
@@ -55,11 +43,10 @@ export default function HeaderNavigation(){
 
               <Navbar.Collapse className="justify-content-end">  
                 <Navbar.Text>
-                    Привет! {localStorage.getItem("id")}
+                    Привет! {localStorage.getItem("name")}
                 </Navbar.Text>
                 <Nav.Link onClick={() => {
-                  logout();
-                  window.location.reload();
+                  RequestExecuter<void>(logout);
                 }} >Выйти</Nav.Link>
               </Navbar.Collapse>
             }

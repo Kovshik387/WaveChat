@@ -3,11 +3,14 @@ import HeaderNavigation from "@components/Header";
 import SignInPage from "@pages/Authorization/SignIn";
 import SignUpPage from "@pages/Authorization/SignUp";
 import MainPage from "@pages/MainPage";
+import { useState } from "react";
 import * as ReactRouter from "react-router-dom";
 
 
 export default function App(){
 	
+	const [header,setHeader] = useState("");
+
 	const router = ReactRouter.createBrowserRouter([
 		{
       path: "/",
@@ -23,11 +26,17 @@ export default function App(){
     }
 	]);
 	return (
-		<div style={mainContent}>
-			<HeaderNavigation/>
-			<ReactRouter.RouterProvider router={router} />
+		<>
+			<HeaderNavigation />
+				<div style={mainContent}>
+					<div className="row">
+						<div>
+							<ReactRouter.RouterProvider router={router}/>
+						</div>
+					</div>
+				</div>
 			<Footer/>
-		</div>
+		</>
 	);
 	
 
@@ -37,6 +46,6 @@ const mainContent : React.CSSProperties = {
 	justifyContent: "flex-end",
 	flexDirection: "column",
 	width: "100%",
-	height: "100%",
+	height: "max-content",
 	flex: 1
 }

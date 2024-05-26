@@ -1,6 +1,6 @@
 export default function FooterComponent() {
   return (
-    <footer style={FooterStyle} className='justify-content-end'>
+    <footer style={FooterStyle} className='fixed-bottom'>
         <h1 style={{color: 'white'}}>        
         <div style={{color: 'white'}} >
             <a style={{textDecoration: "none"}} href="https://github.com/Kovshik387/ProggramingTechnology-Authorization">GitHub</a>

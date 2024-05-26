@@ -4,4 +4,5 @@ export default interface Account {
     lastname: string;
     joinedAt: string;
     profileUrl: string;
+    chatId: string;
 }
