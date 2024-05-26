@@ -11,7 +11,8 @@ export type AuthAccount = {
 export type data = {
     id: string | null,
     accessToken: string | null,
-    refreshToken: string | null
+    refreshToken: string | null,
+    name: string | null
 }
 
 export type AuthResponse = {
@@ -42,10 +43,12 @@ export default function SignInPage(){
             }
             else setErrorEmail(data.errorMessage);
         }else{
+
             localStorage.setItem("id",data.data.id!.toString());
             localStorage.setItem("accessToken",data.data.accessToken!);
             localStorage.setItem("refreshToken",data.data.refreshToken!);
-
+            localStorage.setItem("name",data.data.name!);
+            localStorage.removeItem("idChat");
             navigate('/');
             window.location.reload()
         }

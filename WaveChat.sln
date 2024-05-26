@@ -56,11 +56,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Storage", "src\Sys
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Services.Storage", "src\Services\WaveChat.Services.Storage\WaveChat.Services.Storage.csproj", "{7221FD23-B58E-4A76-B56D-1D0C4CCB4219}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaveChat.Account", "src\Systems\Api\WaveChat.Account\WaveChat.Account.csproj", "{8A8EA46C-99CE-4FC1-8ABF-F1119385CC09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Account", "src\Systems\Api\WaveChat.Account\WaveChat.Account.csproj", "{8A8EA46C-99CE-4FC1-8ABF-F1119385CC09}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaveChat.Services.Account", "src\Services\WaveChat.Services.Account\WaveChat.Services.Account.csproj", "{7E8B8979-E8C3-480F-9F64-24E07406F29D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Services.Account", "src\Services\WaveChat.Services.Account\WaveChat.Services.Account.csproj", "{7E8B8979-E8C3-480F-9F64-24E07406F29D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaveChat.Message", "src\Systems\Api\WaveChat.Message\WaveChat.Message.csproj", "{ADCEA828-6945-4761-ACFC-B7A36BDF29D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Message", "src\Systems\Api\WaveChat.Message\WaveChat.Message.csproj", "{ADCEA828-6945-4761-ACFC-B7A36BDF29D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaveChat.Services.Message", "src\Services\WaveChat.Services.Message\WaveChat.Services.Message.csproj", "{14BBD111-E209-4602-BC63-670FFDEC9461}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -136,6 +138,10 @@ Global
 		{ADCEA828-6945-4761-ACFC-B7A36BDF29D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADCEA828-6945-4761-ACFC-B7A36BDF29D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADCEA828-6945-4761-ACFC-B7A36BDF29D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14BBD111-E209-4602-BC63-670FFDEC9461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14BBD111-E209-4602-BC63-670FFDEC9461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14BBD111-E209-4602-BC63-670FFDEC9461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14BBD111-E209-4602-BC63-670FFDEC9461}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -167,6 +173,7 @@ Global
 		{8A8EA46C-99CE-4FC1-8ABF-F1119385CC09} = {6105A604-D070-4D18-AED6-0D5FD03DD2C9}
 		{7E8B8979-E8C3-480F-9F64-24E07406F29D} = {A7B1A2A0-8EC4-4BD6-9E22-DD228A7E718B}
 		{ADCEA828-6945-4761-ACFC-B7A36BDF29D9} = {6105A604-D070-4D18-AED6-0D5FD03DD2C9}
+		{14BBD111-E209-4602-BC63-670FFDEC9461} = {A7B1A2A0-8EC4-4BD6-9E22-DD228A7E718B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8C0635F-FE64-4F91-8B78-5E65A73CCAC8}

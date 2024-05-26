@@ -31,6 +31,7 @@
 		<ProjectReference Include="..\..\..\Data\WaveChat.Context.Seeder\WaveChat.Context.Seeder.csproj" />
 		<ProjectReference Include="..\..\..\Services\WaveChat.Services.Authorization\WaveChat.Services.Authorization.csproj" />
 		<ProjectReference Include="..\..\..\Services\WaveChat.Services.Logger\WaveChat.Services.Logger.csproj" />
+		<ProjectReference Include="..\..\..\Services\WaveChat.Services.Message\WaveChat.Services.Message.csproj" />
 		<ProjectReference Include="..\..\..\Services\WaveChat.Services.Settings\WaveChat.Services.Settings.csproj" />
 		<ProjectReference Include="..\..\..\Shared\WaveChat.Common.csproj" />
 	</ItemGroup>
