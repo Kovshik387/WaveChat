@@ -17,6 +17,10 @@
   height: 8px;
 }
 
+.row {
+  --bs-gutter-x: 0rem
+}
+
 *::-webkit-scrollbar-track {
   background: transparent;
 }

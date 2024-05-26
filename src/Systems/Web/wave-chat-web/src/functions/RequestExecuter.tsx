@@ -1,65 +1,75 @@
 export default async function requestExecuter<Tdata>(func: () => Promise<Response | null>) : Promise<Tdata | null> {
+    try {
+        let response = await func();
 
-    try{
-        const response = await func();
-        if (response === null){
-            updateToken();
-        }
-        const newResposne = await func();
-        return newResposne!.json() as Tdata;
-    }
-    catch (error) {
-        try{
+        if (response === null) {
             await updateToken();
-            console.log("update token");
-            const response = await func();
-            console.log(response!.status);
-            return await response!.json() as Tdata;
+            response = await func();
         }
-        catch(newError){
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
-            localStorage.removeItem("id");
-            localStorage.removeItem("name");
+
+        if (response === null) {
+            return null;
+        }
+
+        return await response.json() as Tdata;
+    } catch (error) {
+        try {
+            await updateToken();
+            console.log("Token updated");
+            const response = await func();
+
+            if (response === null) {
+                return null;
+            }
+
+            return await response.json() as Tdata;
+        } catch (newError) {
+            console.error("Request failed after token update", newError);
+            clearLocalStorage();
             return null;
         }
     }
 }
 
 async function updateToken() {
-    const headers = new Headers();
+    const refreshToken = localStorage.getItem("refreshToken");
 
-    if (localStorage.getItem("refreshToken") === null) {
-        console.log("refresh пуст")
+    if (!refreshToken) {
+        console.log("Refresh token is missing");
         return;
-    };
-    console.log("Внутри что-то есть")
-    headers.set('Access-Control-Allow-Origin', '*');
-    headers.set('Content-Type','application/json');
-    headers.set("Authorization","Bearer "+ localStorage.getItem("accessToken")!);
-    console.log("refresh: " + localStorage.getItem("refreshToken"));
-    const url = `http://localhost:8010/v1/Authorization/RefreshAccess?refreshToken=${localStorage.getItem("refreshToken")}`;
-    console.log("обновление")
-    const response = await fetch(url,{method: 'Get',headers: headers});
-    if (response.status == 200){
-        var result: AuthResponse = await response.json()
-        if(result.errorMessage === ""){
-            console.log("Данные обновлены");
-            localStorage.setItem("accessToken",result.data.accessToken!);
-            localStorage.setItem("refreshToken",result.data.refreshToken!);
-        }
-        else{
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
-            localStorage.removeItem("id");
-        }
     }
-    else{
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("id");
+
+    console.log("Attempting to update token");
+    const headers = new Headers({
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+    });
+
+    const url = `http://localhost:8010/v1/Authorization/RefreshAccess?refreshToken=${refreshToken}`;
+    const response = await fetch(url, { method: 'GET', headers: headers });
+
+    if (response.status === 200) {
+        const result: AuthResponse = await response.json();
+        if (!result.errorMessage) {
+            localStorage.setItem("accessToken", result.data.accessToken!);
+            localStorage.setItem("refreshToken", result.data.refreshToken!);
+            localStorage.setItem("id",result.data.id!);
+        } else {
+            console.error("Error updating token:", result.errorMessage);
+            clearLocalStorage();
+        }
+    } else {
+        console.error("Failed to update token, response status:", response.status);
+        clearLocalStorage();
     }
-    return 
+}
+
+function clearLocalStorage() {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("id");
+    localStorage.removeItem("name");
 }
 
 export type data = {

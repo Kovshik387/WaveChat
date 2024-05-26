@@ -28,14 +28,14 @@ export default function MainPage() {
     const [accounts, setAccounts] = useState<Account[]>([]);
     const [currentChatId, setCurrentChatId] = useState<string | null>(null);
     useEffect(() => {
-        if (currentChatId){
+        if (currentChatId) {
             async function fetchMessages() {
                 const response = await requestExecuter<MessageInfo[]>(getMessages);
                 if (response !== null) setMessages(response);
             }
             fetchMessages();
         }
-    },[currentChatId]);
+    }, [currentChatId]);
 
     const joinRoom = async (chatId: string) => {
         if (connection) {
@@ -47,7 +47,7 @@ export default function MainPage() {
                 .withUrl("http://localhost:8020/chat")
                 .configureLogging(LogLevel.Information)
                 .build();
-                connection.on("ReceiveMessage", (message: MessageInfo) => {
+            connection.on("ReceiveMessage", (message: MessageInfo) => {
                 setMessages((messages) => [...messages, message]);
             });
 
@@ -89,12 +89,12 @@ export default function MainPage() {
         <div style={{ flex: 1 }}>
             {
                 localStorage.getItem("id") !== null ?
-                    <div className="row">
+                    <div className="row ">
                         <SideBar closeConnection={closeConnection} joinRoom={joinRoom} setCurrentChatId={setCurrentChatId} />
                         <div className="col col-sm-9">
                             {!connection ?
                                 (
-                                    <h1 style={{textAlign:"center"}}></h1>
+                                    <h1 style={{ textAlign: "center" }}></h1>
                                 )
                                 :
                                 (

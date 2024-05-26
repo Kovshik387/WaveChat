@@ -41,6 +41,7 @@ export default function SideBar(lobby: LobbyProps) {
     }, []);
     return (
         <>
+        
             <div className="col col-sm-3">
                 <div style={sidebarStyle}>
                     {
