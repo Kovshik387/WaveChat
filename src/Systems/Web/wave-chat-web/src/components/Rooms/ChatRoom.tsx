@@ -26,8 +26,8 @@ const ChatRoom = ({
   }, [messages]);
 
   return (
-    <div >
-      <div style={MessageListCss}>
+    <div style={{padding: "10px"}}>
+      <div style={modernCardStyle}>
         <MessageList messages={messages} />
         <div className="" ref={messageRef}>
         </div>
@@ -39,12 +39,15 @@ const ChatRoom = ({
   );
 };
 
-const MessageListCss: React.CSSProperties = {
-  border: "1px solid ",
+const modernCardStyle: React.CSSProperties = {
+  border: "1px solid rgba(0, 0, 0, 0.125)",
+  borderRadius: "10px",
+  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
   padding: "20px",
-  height: '75vh',
+  background: "white",
+  transition: "transform 0.2s",
   overflowY: 'scroll',
-  backgroundColor: 'white'
-}
+  height: '80vh',
+};
 
 export default ChatRoom;

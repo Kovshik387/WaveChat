@@ -13,7 +13,7 @@ interface SendMessageProps {
   
     const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      sendMessage(localStorage.getItem("id")!,message,localStorage.getItem("idChat")!,localStorage.getItem("username")!);
+      sendMessage(localStorage.getItem("id")!,message,localStorage.getItem("idChat")!,localStorage.getItem("name")!);
       setMessage("");
     };
   

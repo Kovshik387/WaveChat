@@ -44,6 +44,7 @@ const messageContainer: React.CSSProperties = {
     display: "flex",
     flexDirection: "column",
     margin: "10px",
+    
 }
 
 export default MessageList;

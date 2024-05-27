@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import SideBarItem from "./SideBarItem"
 import AccountChats from "@models/Chat";
 import requestExecuter from "@functions/RequestExecuter";
+import { Search } from "react-bootstrap-icons";
+import SearchSideBar from "./SearchSideBar";
 
 export interface LobbyProps {
     joinRoom: (userName: string) => void;
@@ -41,12 +43,12 @@ export default function SideBar(lobby: LobbyProps) {
     }, []);
     return (
         <>
-        
             <div className="col col-sm-3">
                 <div style={sidebarStyle}>
+                    <SearchSideBar />
                     {
                         accountChat.map((chat, index) => (
-                            <SideBarItem chat={chat} key={index} joinRoom={lobby.joinRoom} closeConnection={lobby.closeConnection}  setCurrentChatId={lobby.setCurrentChatId} />
+                            <SideBarItem chat={chat} key={index} joinRoom={lobby.joinRoom} closeConnection={lobby.closeConnection} setCurrentChatId={lobby.setCurrentChatId} />
                         ))
                     }
                 </div>
