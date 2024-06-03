@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WaveChat.Context;
@@ -11,9 +12,11 @@ using WaveChat.Context;
 namespace WaveChat.Context.Migrations.PgSql.Migrations
 {
     [DbContext(typeof(CorporateMessengerContext))]
-    partial class CorporateMessengerContextModelSnapshot : ModelSnapshot
+    [Migration("20240518161922_init4")]
+    partial class init4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -334,10 +337,6 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                     b.Property<Guid>("Uid")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("Userid")
-                        .HasColumnType("integer")
-                        .HasColumnName("userid");
-
                     b.HasKey("Id")
                         .HasName("userschannels_pkey");
 
@@ -345,8 +344,6 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
 
                     b.HasIndex("Uid")
                         .IsUnique();
-
-                    b.HasIndex("Userid");
 
                     b.ToTable("userschannels", (string)null);
                 });
@@ -606,14 +603,7 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasForeignKey("Channelid")
                         .HasConstraintName("userschannels_channelid_fkey");
 
-                    b.HasOne("WaveChat.Context.Entities.Users.User", "User")
-                        .WithMany("Userschannels")
-                        .HasForeignKey("Userid")
-                        .HasConstraintName("userschannels_userid_fkey");
-
                     b.Navigation("Channel");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WaveChat.Context.Entities.Photo", b =>
@@ -712,8 +702,6 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                     b.Navigation("Newscomments");
 
                     b.Navigation("Photos");
-
-                    b.Navigation("Userschannels");
                 });
 #pragma warning restore 612, 618
         }

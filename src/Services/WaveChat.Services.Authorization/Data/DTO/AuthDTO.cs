@@ -11,5 +11,6 @@ namespace WaveChat.Services.Authorization.Data.DTO
         public Guid Id {  get; set; }
         public string AccessToken { get; set; } = string.Empty;
         public string RefreshToken { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
     }
 }

@@ -20,6 +20,11 @@ public static class UsersChannelsConfiguration
 
             entity.Property(e => e.Id).HasColumnName("iduserchannel");
             entity.Property(e => e.Channelid).HasColumnName("channelid");
+            entity.Property(e => e.Userid).HasColumnName("userid");
+
+            entity.HasOne(u => u.User).WithMany(p => p.Userschannels)
+                .HasForeignKey(u => u.Userid).
+                HasConstraintName("userschannels_userid_fkey");
 
             entity.HasOne(d => d.Channel).WithMany(p => p.Userschannels)
                 .HasForeignKey(d => d.Channelid)

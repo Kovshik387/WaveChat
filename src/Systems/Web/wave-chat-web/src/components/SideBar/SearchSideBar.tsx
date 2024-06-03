@@ -10,8 +10,6 @@ export default function SearchSideBar() {
     const handleSubmit = async (event: React.SyntheticEvent<HTMLFormElement>) => {
         event.preventDefault();
         event.stopPropagation();
-
-
     }
     return (
         <>

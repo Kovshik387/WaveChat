@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WaveChat.Context;
@@ -11,9 +12,11 @@ using WaveChat.Context;
 namespace WaveChat.Context.Migrations.PgSql.Migrations
 {
     [DbContext(typeof(CorporateMessengerContext))]
-    partial class CorporateMessengerContextModelSnapshot : ModelSnapshot
+    [Migration("20240519094229_init6")]
+    partial class init6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -334,9 +337,8 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                     b.Property<Guid>("Uid")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("Userid")
-                        .HasColumnType("integer")
-                        .HasColumnName("userid");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id")
                         .HasName("userschannels_pkey");
@@ -346,7 +348,7 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                     b.HasIndex("Uid")
                         .IsUnique();
 
-                    b.HasIndex("Userid");
+                    b.HasIndex("UserId");
 
                     b.ToTable("userschannels", (string)null);
                 });
@@ -606,14 +608,11 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                         .HasForeignKey("Channelid")
                         .HasConstraintName("userschannels_channelid_fkey");
 
-                    b.HasOne("WaveChat.Context.Entities.Users.User", "User")
+                    b.HasOne("WaveChat.Context.Entities.Users.User", null)
                         .WithMany("Userschannels")
-                        .HasForeignKey("Userid")
-                        .HasConstraintName("userschannels_userid_fkey");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Channel");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WaveChat.Context.Entities.Photo", b =>

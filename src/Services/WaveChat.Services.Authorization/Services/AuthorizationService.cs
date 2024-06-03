@@ -65,7 +65,7 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
             };
         }
 
-        var authResult = _jwtUtils.GenerateJwtToken(user.Uid);
+        var authResult = _jwtUtils.GenerateJwtToken(user.Uid); authResult.Name = user.Name;
 
         user.RefreshToken = authResult.RefreshToken;
         _context.Users.Update(user); await _context.SaveChangesAsync();

@@ -35,17 +35,38 @@ public class AccountService(CorporateMessengerContext context,IMapper mapper, IL
         return accountDto;
     }
 
-    public async Task<bool> UpdateAccountDataAsync(AccountDto account)
+    public async Task<AccountDetailsDTO> GetAccountDetailsByIdAsync(string id)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.Uid.Equals(account.Uid));
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Uid.Equals(Guid.Parse(id)));
+
+        if (user is null) throw new Exception();
+
+        var accountDto = _mapper.Map<AccountDetailsDTO>(user);
+
+        var url = new Uri($"http://storage_service:8080/v1/Storage/GetUserProfile?userId={accountDto.Uid}");
+
+        using var request = new HttpRequestMessage(HttpMethod.Get, url.ToString());
+
+        using var response = await _httpClient.SendAsync(request);
+        accountDto.UrlImage = await response.Content.ReadAsStringAsync();
+
+        return accountDto;
+    }
+
+    public async Task<bool> UpdateAccountDataAsync(AccountDetailsDTO account)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(x => x.Uid.Equals(Guid.Parse(account.Uid)));
 
         if (user is null) return false;
 
-        user.Surname = account.Surname; user.Username = account.UserName;
+        user.Surname = account.Surname; user.Email = account.Email;
         user.Name = account.Name; user.Lastname = account.LastName;
+        user.Username = account.UserName;
 
         _context.Users.Update(user); await _context.SaveChangesAsync();
         
         return true;
     }
+
+
 }

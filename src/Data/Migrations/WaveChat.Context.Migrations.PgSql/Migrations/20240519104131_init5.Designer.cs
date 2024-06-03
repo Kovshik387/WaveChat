@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WaveChat.Context;
@@ -11,9 +12,11 @@ using WaveChat.Context;
 namespace WaveChat.Context.Migrations.PgSql.Migrations
 {
     [DbContext(typeof(CorporateMessengerContext))]
-    partial class CorporateMessengerContextModelSnapshot : ModelSnapshot
+    [Migration("20240519104131_init5")]
+    partial class init5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -609,7 +612,7 @@ namespace WaveChat.Context.Migrations.PgSql.Migrations
                     b.HasOne("WaveChat.Context.Entities.Users.User", "User")
                         .WithMany("Userschannels")
                         .HasForeignKey("Userid")
-                        .HasConstraintName("userschannels_userid_fkey");
+                        .HasConstraintName("user_userid_fkey");
 
                     b.Navigation("Channel");
 

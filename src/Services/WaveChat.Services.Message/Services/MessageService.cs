@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
 using WaveChat.Common.Extensions;
 using WaveChat.Context;
+using WaveChat.Context.Entities.Messages;
 using WaveChat.Services.Message.Data.DTO;
 using WaveChat.Services.Message.Infrastructure;
 
@@ -15,19 +18,52 @@ public class MessageService(ILogger<MessageService> logger,CorporateMessengerCon
     private readonly IMapper _mapper = mapper;
     public async Task AddMessageAsync(MessageDTO message)
     {
-        _logger.LogInformation($"Письмо отправлено: {message}");
+        _logger.LogInformation($"Письмо отправлено: {message.UidChannel}");
 
         var chat = await _context.Channels.Where(x => x.Uid.Equals(message.UidChannel)).FirstOrDefaultAsync();
         if (chat is null) throw new Exception("Нет чата");
-        
-        chat.Messages.Add(_mapper.Map<WaveChat.Context.Entities.Messages.Message>(message));
+
+        var idChannel = await _context.Channels.FirstAsync(x => x.Uid.Equals(message.UidChannel));
+        var idUser = await _context.Users.FirstAsync(x => x.Uid.Equals(message.UidUser));
+
+        chat.Messages.Add(new Context.Entities.Messages.Message()
+        {
+            Content = message.Content,
+            Idchannel = idChannel.Id,
+            Senddate = message.SendDate,
+            Iduser = idUser.Id,
+            Isread = true,
+            
+        });
 
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<IList<ChatDTO>?> GetUserChatsAsync(string idUser)
+    {
+        var temp = await _context.Users.FirstAsync(x => x.Uid == Guid.Parse(idUser));
+
+        var anotherUser = await _context.Userschannels.Include(x => x.Channel).ThenInclude(x => x.Messages).Where(x => x.Userid == temp.Id)
+            .Select(x => new ChatDTO
+            {
+                MyMessage = false,
+                Uid = x.Channel!.Uid,
+                Name = x.Channel.Name,
+                Users = _mapper.Map<IList<UserDTO>>(x.Channel!.Userschannels.
+                    Where(x => x.Userid != temp.Id).Select(x => x.User).ToList()),
+                Url = "",
+                LastMessage = x.Channel.Messages.OrderByDescending(cd => cd.Id).First().Content
+            })
+            .ToListAsync();
+
+        return _mapper.Map<IList<ChatDTO>>(anotherUser);
     }
 
     public async Task<IList<MessageDTO>> GetMessageByChatAsync(string chatId)
     {
         _logger.LogInformation($"{chatId}");
-        return _mapper.Map<IList<MessageDTO>>(await _context.Messages.Where(x => x.Uid.Equals(chatId)).ToListAsync());
+        var result = await _context.Channels.Where(x => x.Uid.Equals(Guid.Parse(chatId))).FirstOrDefaultAsync();
+
+        return _mapper.Map<IList<MessageDTO>>(result.Messages);
     }
 }

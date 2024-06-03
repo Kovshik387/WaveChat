@@ -16,7 +16,7 @@ namespace WaveChat.Services.Storage.Services
         private readonly ILogger<StorageService> _logger = logger;
         private readonly CorporateMessengerContext _context = context;
         private readonly IMinioClientFactory _minioClientFactory = minioClientFactory;
-        public async Task<bool> AddProfileFileAsync(string userId, IFormFile file)
+        public async Task<string> AddProfileFileAsync(string userId, IFormFile file)
         {
             try
             {
@@ -31,7 +31,16 @@ namespace WaveChat.Services.Storage.Services
 
                     var fileName = Guid.NewGuid().ToString() + ".png";
 
-                    var user = await _context.Users.FirstOrDefaultAsync(x => x.Uid.ToString() == userId);
+                    var user = await _context.Users.Include(x => x.Photos).FirstOrDefaultAsync(x => x.Uid.ToString() == userId);
+
+                    var exist = user!.Photos.Where(x => x.IsProfile && x.IsActive && x.Iduser.Equals(user.Id)).FirstOrDefault();
+
+                    if (exist is not null)
+                    {
+                        exist.IsActive = false;
+                        _context.Photos.Update(exist);
+                        await _context.SaveChangesAsync();
+                    }
 
                     var putObjectArgs = new PutObjectArgs()
                         .WithBucket(userId)
@@ -52,13 +61,14 @@ namespace WaveChat.Services.Storage.Services
                     await _context.SaveChangesAsync();
 
                     await minioClient.PutObjectAsync(putObjectArgs);
-                    return true;
+
+                    return await this.GetPresignedFileAsync(userId);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return false;
+                return "";
             }
         }
 
@@ -67,15 +77,19 @@ namespace WaveChat.Services.Storage.Services
             using (var minioClient = _minioClientFactory.CreateClient())
             {
                 var user = await _context.Users.FirstOrDefaultAsync(x => x.Uid == Guid.Parse(userId));
-                var fileName = await _context.Photos.FirstOrDefaultAsync(x => x.IsProfile == true && x.IsActive == true);
+                var fileName = await _context.Photos.FirstOrDefaultAsync(x => x.IsProfile && x.IsActive && x.Iduser == user!.Id);
 
                 if (fileName is null) throw new ArgumentNullException();
 
-                var args = new PresignedGetObjectArgs()
-                    .WithBucket(userId)
-                    .WithObject(fileName!.Image)
-                    .WithExpiry(60*60*60);
-                return await minioClient.PresignedGetObjectAsync(args);
+                if (await minioClient.BucketExistsAsync(new BucketExistsArgs().WithBucket(userId)))
+                {
+                    var args = new PresignedGetObjectArgs()
+                        .WithBucket(userId)
+                        .WithObject(fileName.Image)
+                        .WithExpiry(60*60*60);
+                    return await minioClient.PresignedGetObjectAsync(args);
+                }
+                return "";
             }
         }
     }

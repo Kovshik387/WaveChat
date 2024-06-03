@@ -7,7 +7,7 @@ namespace WaveChat.Context.Entities.Messages;
 
 public partial class Message : EntityBase
 {
-    public DateOnly Senddate { get; set; }
+    public DateTime Senddate { get; set; }
 
     public bool Isread { get; set; }
 

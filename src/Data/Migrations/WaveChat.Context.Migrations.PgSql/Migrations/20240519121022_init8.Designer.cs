@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WaveChat.Context;
@@ -11,9 +12,11 @@ using WaveChat.Context;
 namespace WaveChat.Context.Migrations.PgSql.Migrations
 {
     [DbContext(typeof(CorporateMessengerContext))]
-    partial class CorporateMessengerContextModelSnapshot : ModelSnapshot
+    [Migration("20240519121022_init8")]
+    partial class init8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
