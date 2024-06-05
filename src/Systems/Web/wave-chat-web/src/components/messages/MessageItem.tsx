@@ -6,7 +6,7 @@ interface MessageItemProps {
 }
 
 export default function Message({ message }: MessageItemProps) {
-	console.log(message)
+
 	return (
 		<>
 			{

@@ -3,9 +3,9 @@ export default async function requestExecuter<Tdata>(func: () => Promise<Respons
     try {
         response = await func();
 
-        if (!response) {
-            if (response!.status == 401){
-                await tryRefreshToken();
+        if (response && response.status === 401) {
+            const tokenRefreshed = await tryRefreshToken();
+            if (tokenRefreshed) {
                 response = await func();
             }
         }
@@ -18,12 +18,16 @@ export default async function requestExecuter<Tdata>(func: () => Promise<Respons
     } catch (error) {
         console.error("Initial request failed", error);
         try {
-            await tryRefreshToken();
-            const response = await func();
-            if (!response) {
+            const tokenRefreshed = await tryRefreshToken();
+            if (tokenRefreshed) {
+                response = await func();
+                if (!response) {
+                    return null;
+                }
+                return await response.json() as Tdata;
+            } else {
                 return null;
             }
-            return await response.json() as Tdata;
         } catch (newError) {
             console.error("Request failed after token refresh", newError);
             clearLocalStorage();

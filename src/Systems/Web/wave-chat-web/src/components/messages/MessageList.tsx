@@ -1,12 +1,15 @@
 import { MessageInfo } from "models/MessageInfo";
 import MessageItem from "./MessageItem";
-import React from "react";
+import React, { useEffect } from "react";
 
 interface MessageListProps {
     messages: MessageInfo[];
 }
 
 const MessageList = ({ messages }: MessageListProps) => {
+    useEffect(() => {
+        console.log("update");
+    },[]) 
     return (
         <>
             <div style={messageContainer}>
