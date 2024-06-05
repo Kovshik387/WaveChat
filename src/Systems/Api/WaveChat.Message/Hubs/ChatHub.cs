@@ -19,7 +19,6 @@ public class ChatHub(IMessageService messageService,ILogger<ChatHub> logger) : H
     public async Task JoinChat(string chatId)
     {
         Console.WriteLine("chat connect" + chatId   );
-        _logger.LogInformation("chat connect" + chatId);
         await Groups.AddToGroupAsync(Context.ConnectionId,chatId);
 
         await Clients.Group(chatId).SendAsync("JoinGroup",chatId);
@@ -29,7 +28,6 @@ public class ChatHub(IMessageService messageService,ILogger<ChatHub> logger) : H
     //[Authorize]
     public async Task SendMessage(string userId, string content, string chatId,string userName = "пользователь")
     {
-        //await Clients.Group(chatId).SendAsync("ReceiveMessage", userId, content);
         await _messageService.AddMessageAsync(new Services.Message.Data.DTO.MessageDTO()
         {
             Content = content,
@@ -45,10 +43,6 @@ public class ChatHub(IMessageService messageService,ILogger<ChatHub> logger) : H
             UidUser = Guid.Parse(userId),
             Name = userName
         });
-
-
-        Console.WriteLine($"Message: {content}");
-        _logger.LogInformation($"Message: {content}");
     }
 
 }

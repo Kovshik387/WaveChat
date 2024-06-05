@@ -15,6 +15,7 @@ export interface LobbyProps {
 export default function SideBar(lobby: LobbyProps) {
     const [accountChat, setAccountsChats] = useState<AccountChats[]>([]);
     const [newAccountChat, setNewAccountsChats] = useState<AccountDetails[]>([]);
+    const [search, setSearch] = useState("");
 
     async function GetChats(): Promise<Response | null> {
         const headers = new Headers();
@@ -35,29 +36,26 @@ export default function SideBar(lobby: LobbyProps) {
                 if (data === null) {
                     console.log("Данные не получены")
                 }
-                else setAccountsChats(data);
+                else setAccountsChats(data.reverse());
             }
             catch (error) {
                 console.log(error);
             }
         }
-
-            
-
-        fetchChat();
+        if (accountChat.length == 0) fetchChat();
     }, []);
     return (
         <>
             <div className="col col-sm-3" style={{ padding: "20px" }}>
                 <div style={sidebarStyle}>
-                    <SearchSideBar setNewAccount={setNewAccountsChats} />
+                    <SearchSideBar search={search} setSearch={setSearch} setNewAccount={setNewAccountsChats} />
                     {
                         (newAccountChat
                             ?
                             <div>
                                 {
                                     newAccountChat.map((chat, index) => (
-                                        <SideBarSearchItem chat={chat} key={index} joinRoom={lobby.joinRoom} closeConnection={lobby.closeConnection} setCurrentChatId={lobby.setCurrentChatId} />
+                                        <SideBarSearchItem setSearch={setSearch} setNewAccount={setNewAccountsChats} chat={accountChat} newChat={chat} key={index} joinRoom={lobby.joinRoom} closeConnection={lobby.closeConnection} setCurrentChatId={lobby.setCurrentChatId} />
                                     ))
                                 }
                                 <hr></hr>
@@ -84,11 +82,11 @@ export default function SideBar(lobby: LobbyProps) {
 const sidebarStyle: React.CSSProperties = {
     backgroundColor: '#2D2D2D',
     color: 'white',
-    height: '85vh',
+    height: '80vh',
     overflowY: 'auto',
     padding: '20px',
     border: '2px solid #000',
     borderRadius: '10px',
     transition: 'background-color 0.3s, color 0.3s',
-    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 2px 4px rgba(218, 223, 225, 0.7)',
 };

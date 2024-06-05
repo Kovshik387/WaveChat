@@ -11,12 +11,10 @@ interface SideBarItemProps extends LobbyProps {
 }
 
 export default function SideBarItem(item: SideBarItemProps) {
-
     const [userUrl, setUserUrl] = useState("");
     const [anotherUserUrl, setAnotherUserUrl] = useState("");
     const [isHovered, setIsHovered] = useState(false);
     let anotherUserId = "";
-    console.log(item.chat)
     if (item.chat.users.length != 0) {
         anotherUserId = item.chat.users[0].uid;
     }

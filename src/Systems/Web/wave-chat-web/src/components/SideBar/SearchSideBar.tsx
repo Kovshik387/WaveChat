@@ -1,19 +1,18 @@
 import requestExecuter from "@functions/RequestExecuter";
 import AccountDetails from "@models/AccountDetails";
-import AccountChats from "@models/Chat";
 import { useEffect, useState } from "react";
 import { Form, InputGroup, Button } from "react-bootstrap";
 
 export interface SideBarProprs {
     setNewAccount: (value: AccountDetails[]) => void;
+    setSearch: (value: string) => void;
+    search: String;
 }
 
-export default function SearchSideBar({ setNewAccount }: SideBarProprs) {
-    const [search, setSearch] = useState("");
+export default function SearchSideBar({ setNewAccount, setSearch, search }: SideBarProprs) {
     useEffect(() => {
 
     }, []);
-
     const handleSubmit = async (event: React.SyntheticEvent<HTMLFormElement>) => {
         event.preventDefault();
         event.stopPropagation();
@@ -31,7 +30,6 @@ export default function SearchSideBar({ setNewAccount }: SideBarProprs) {
             }
             const data = await requestExecuter<AccountDetails[]>(GetNewChats);
             if (!data) return;
-            console.log(data);
             setNewAccount(data);
         }
         catch (error) {
@@ -50,7 +48,7 @@ export default function SearchSideBar({ setNewAccount }: SideBarProprs) {
                 <InputGroup className="mb-3 " data-bs-theme="dark">
                     <Form.Control
                         placeholder="@Пользователь"
-                        aria-describedby="basic-addon2"
+                        value={search.toString()}
                         onChange={onChangeHandler}
                     />
                     <Button type="submit" variant="secondary">
@@ -61,6 +59,7 @@ export default function SearchSideBar({ setNewAccount }: SideBarProprs) {
         </>
     )
 }
+
 const sideBarSearch: React.CSSProperties = {
     display: "flex",
     alignItems: "center",

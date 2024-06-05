@@ -36,4 +36,12 @@ public class ChatController(IMessageService messageService,IAppLogger logger) : 
     {
         return Ok(await _messageService.GetAccountByUserNameAsync(userName,id));
     }
+
+    [Authorize]
+    [HttpPost]
+    [ApiVersion("1.0")]
+    public async Task<IActionResult> NewChatAsync(string idUser, string idAnotherUser)
+    {
+        return Ok(await _messageService.NewChatAsync(idUser, idAnotherUser));
+    }
 }

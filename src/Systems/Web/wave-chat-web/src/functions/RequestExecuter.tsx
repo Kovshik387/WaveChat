@@ -1,10 +1,13 @@
 export default async function requestExecuter<Tdata>(func: () => Promise<Response | null>): Promise<Tdata | null> {
+    let response: Response | null;
     try {
-        let response = await func();
+        response = await func();
 
         if (!response) {
-            await tryRefreshToken();
-            response = await func();
+            if (response!.status == 401){
+                await tryRefreshToken();
+                response = await func();
+            }
         }
 
         if (!response) {

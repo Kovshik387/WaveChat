@@ -68,11 +68,14 @@ public class MessageService(ILogger<MessageService> logger,CorporateMessengerCon
         if (user is null)
             throw new Exception("User not found");
 
+        var result = new List<UserDTO>();
+
+        if (string.IsNullOrWhiteSpace(userName))
+            return result;
+
         var users = await _context.Users
             .Where(x => EF.Functions.Like(x.Username, $"%{userName}%"))
             .ToListAsync();
-
-        var result = new List<UserDTO>();
 
         var userChatIds = await _context.Userschannels
             .Where(x => x.Userid.Equals(user.Id))
@@ -107,5 +110,37 @@ public class MessageService(ILogger<MessageService> logger,CorporateMessengerCon
         var result = await _context.Channels.Where(x => x.Uid.Equals(Guid.Parse(chatId))).FirstOrDefaultAsync();
 
         return _mapper.Map<IList<MessageDTO>>(result.Messages);
+    }
+
+    public async Task<ChatDTO> NewChatAsync(string idUser,string idAnotherUser)
+    {
+        var id = await _context.Users.FirstOrDefaultAsync(x => x.Uid.Equals(Guid.Parse(idUser)));
+        var idAnother = await _context.Users.FirstOrDefaultAsync(x => x.Uid.Equals(Guid.Parse(idAnotherUser)));
+
+        var channel = await _context.Channels.AddAsync(new Channel()
+        {
+            Uid = Guid.NewGuid(),
+            Name = "",
+            Userschannels = new List<Userschannel>()
+            {
+               new Userschannel() { Userid =  id!.Id, Uid = Guid.NewGuid()},
+               new Userschannel() { Userid = idAnother!.Id, Uid = Guid.NewGuid()}
+            }
+        });
+        await _context.SaveChangesAsync();
+
+        var result = new ChatDTO()
+        {
+            MyMessage = false,
+            Uid = channel.Entity.Uid,
+            Name = channel.Entity.Name,
+            Users = _mapper.Map<IList<UserDTO>>(channel.Entity.Userschannels.
+                    Where(x => x.Userid != id.Id).Select(x => x.User).ToList()),
+            Url = "",
+            LastMessage = ""
+        };
+
+
+        return result;
     }
 }

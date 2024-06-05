@@ -131,7 +131,7 @@ export default function AccountInfo() {
                                     src={accountDetails?.urlImage === "" ? "https://cdn-icons-png.flaticon.com/512/149/149452.png" : accountDetails?.urlImage}
                                     alt={accountDetails?.userName}
                                 />
-                                <div style={{ paddingTop: "10px" }}>
+                                <div style={{ paddingTop: "20px" }}>
                                     <Button variant="primary" onClick={handleShowModal}>
                                         Загрузить новое фото
                                     </Button>

@@ -8,7 +8,22 @@ interface SideBarItemProps extends LobbyProps {
     closeConnection: () => void;
     joinRoom: (userName: string) => void;
     setCurrentChatId: (chatId: string) => void;
-    chat: AccountDetails;
+    newChat: AccountDetails;
+    chat: AccountChats[];
+    setNewAccount: (value: AccountDetails[]) => void;
+    setSearch: (value: string) => void;
+}
+
+async function createNewChat(idUser: String, idAnotherUser: String) {
+    const headers = new Headers();
+        headers.set('Access-Control-Allow-Origin', '*');
+        headers.set('Content-Type', 'application/json');
+        headers.set("Authorization", "Bearer " + localStorage.getItem("accessToken")!);
+        const url = `http://localhost:8020/v1/Chat/NewChat?idUser=${idUser}&idAnotherUser=${idAnotherUser}`;
+        try {
+            return fetch(url, { method: 'Post', headers: headers });
+        }
+        catch (error) { return null; }
 }
 
 export default function SideBarSearchItem(item: SideBarItemProps) {
@@ -17,8 +32,7 @@ export default function SideBarSearchItem(item: SideBarItemProps) {
     const [anotherUserUrl, setAnotherUserUrl] = useState("");
     const [isHovered, setIsHovered] = useState(false);
     let anotherUserId = "";
-    console.log(item.chat)
-    anotherUserId = item.chat.uid;
+    anotherUserId = item.newChat.uid;
 
     useEffect(() => {
         async function getImages() {
@@ -37,32 +51,37 @@ export default function SideBarSearchItem(item: SideBarItemProps) {
             }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
-                onClick={() => {
-                    if (item.chat.uid === localStorage.getItem("idChat")){
+                onClick={async () => {
+                    if (item.newChat.uid === localStorage.getItem("idChat")){
                         return;
                     }
                     localStorage.removeItem("idChat");
                     item.closeConnection();
-                    localStorage.setItem("idChat", item.chat.uid);
-                    item.joinRoom(item.chat.uid);
-                    item.setCurrentChatId(item.chat.uid);
+                    let idChat = await createNewChat(localStorage.getItem("id")!,anotherUserId);
+                    let data = await idChat?.json() as AccountChats;
+                    if (!data) return;
+
+                    item.chat.push(data);
+                    item.setNewAccount([]);
+                    item.setSearch("");
+                    localStorage.setItem("idChat",data.uid);
+                    
+                    item.joinRoom(data.uid);
+                    item.setCurrentChatId(data.uid);
                 }}>
                 <div>
                     <img
                         style={imageStyle}
                         src={anotherUserUrl === "" || anotherUserUrl === null ? "https://cdn-icons-png.flaticon.com/512/149/149452.png" : anotherUserUrl}
-                        alt={item.chat.name}
+                        alt={item.newChat.name}
                     />
                 </div>
                 <div style={contentStyle}>
                     <span
                         style={{ fontWeight: "bold" }}>
-                        {item.chat.name}
+                        {item.newChat.name}
                     </span>
                     <div style={lastMessageStyle}>
-                        {/* <p>
-                            {item.chat.lastMessage}
-                        </p> */}
                     </div>
                 </div>
             </div>

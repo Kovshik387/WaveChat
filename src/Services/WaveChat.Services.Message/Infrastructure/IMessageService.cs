@@ -14,4 +14,5 @@ public interface IMessageService
     public Task AddMessageAsync(MessageDTO message);
     public  Task<IList<ChatDTO>?> GetUserChatsAsync(string idUser);
     public Task<List<UserDTO>> GetAccountByUserNameAsync(string userName, string uid);
+    public Task<ChatDTO> NewChatAsync(string idUser, string idAnotherUser);
 }
