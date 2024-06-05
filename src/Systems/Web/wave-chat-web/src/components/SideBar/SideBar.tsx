@@ -28,12 +28,12 @@ export default function SideBar(lobby: LobbyProps) {
         headers.set("Authorization", "Bearer " + localStorage.getItem("accessToken")!);
         const url = `http://localhost:8020/v1/Chat/GetChatMessage?idChat=${chatId}`;
         try {
-            const response = await fetch(url, { method: 'GET', headers: headers });
-            if (!response.ok) {
-                console.log("Network response was not ok");
-                return null;
-            }
-            return response;
+            return fetch(url, { method: 'GET', headers: headers });
+            // if (!response.ok) {
+            //     console.log("Network response was not ok");
+            //     return null;
+            // }
+            // return response;
         } catch (error) {
             console.error("Failed to fetch messages:", error);
             return null;
@@ -47,8 +47,11 @@ export default function SideBar(lobby: LobbyProps) {
         headers.set("Authorization", "Bearer " + localStorage.getItem("accessToken")!);
         const url = `http://localhost:8020/v1/Chat/GetUserChats?idUser=${localStorage.getItem("id")}`;
         try {
-            const response = await fetch(url, { method: 'GET', headers: headers });
-            return response;
+            return fetch(url, { method: 'GET', headers: headers });
+            // if (!response.ok){
+            //     return null;
+            // }
+            // return response;
         } catch (error) {
             console.error("Failed to fetch chats:", error);
             return null;
@@ -57,9 +60,9 @@ export default function SideBar(lobby: LobbyProps) {
 
     async function fetchChats() {
         try {
-            const response = await GetChats();
+            const response = await requestExecuter<AccountChats[]>(() => GetChats());
             if (response !== null) {
-                const data = await response.json() as AccountChats[];
+                const data = response;
                 if (data.length > 0) {
                     setAccountsChats(data.reverse());
                 } else {
@@ -98,7 +101,6 @@ export default function SideBar(lobby: LobbyProps) {
         if (lobby.connection) {
             lobby.connection.on("NewMessageNotification", (message: MessageInfo) => {
                 console.log("New message notification:", message);
-                // Обновление списка чатов
                 fetchChats();
             });
 

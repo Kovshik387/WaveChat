@@ -29,6 +29,7 @@ export default function MainPage() {
     const [currentChatId, setCurrentChatId] = useState<string | null>(null);
 
     useEffect(() => {
+        setCurrentChatId(null);
         const connect = new HubConnectionBuilder()
             .withUrl("http://localhost:8020/chat")
             .configureLogging(LogLevel.Information)
@@ -153,7 +154,7 @@ export default function MainPage() {
                                 closeConnection={closeConnection}
                             />
                         ) : (
-                            <h1 style={{ textAlign: "center",top: "45%", left:"60%",position: "absolute",transform: "translate(-50%,-50%)" }}>Выберите чат</h1>
+                            <h1 style={{ textAlign: "center",top: "45%", left:"60%",position: "absolute",transform: "translate(-50%,-50%)" }}>Начните общаться сейчас!</h1>
                         )}
                     </div>
                 </div>

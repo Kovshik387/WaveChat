@@ -132,7 +132,7 @@ export default function AccountInfo() {
                                     alt={accountDetails?.userName}
                                 />
                                 <div style={{ paddingTop: "20px" }}>
-                                    <Button variant="primary" onClick={handleShowModal}>
+                                    <Button  variant="secondary" onClick={handleShowModal}>
                                         Загрузить новое фото
                                     </Button>
                                 </div>
@@ -205,13 +205,13 @@ export default function AccountInfo() {
 
                                     <div style={{ paddingTop: "10px" }}>
                                         {isEditing ? (
-                                            <button className={"btn btn-primary"} onClick={handleSave}>
+                                            <Button  variant="secondary" onClick={handleSave}>
                                                 Сохранить
-                                            </button>
+                                            </Button>
                                         ) : (
-                                            <button className={"btn btn-primary"} onClick={handleEditToggle}>
+                                            <Button  variant="secondary" onClick={handleEditToggle}>
                                                 Изменить данные
-                                            </button>
+                                            </Button>
                                         )}
                                     </div>
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "react-bootstrap";
 
 interface SendMessageProps {
     sendMessage: (userId: string,content: string, chatId:string, username:string) => void;
@@ -28,9 +29,9 @@ interface SendMessageProps {
             placeholder="Сообщение"
           />
           <div className="input-group-append">
-            <button type="submit" className="btn btn-primary" disabled={!message}>
+            <Button type="submit" className="btn btn-primary" variant="secondary"  disabled={!message}>
               Отправить
-            </button>
+            </Button>
           </div>
         </div>
       </form>
