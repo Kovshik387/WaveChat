@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.SignalR;
 using WaveChat.Context.Entities.Messages;
 using WaveChat.Context.Entities.Users;
+using WaveChat.Services.Message.Data.DTO;
 using WaveChat.Services.Message.Infrastructure;
 
 namespace WaveChat.Message.Hubs;
@@ -35,14 +36,20 @@ public class ChatHub(IMessageService messageService,ILogger<ChatHub> logger) : H
             UidChannel = Guid.Parse(chatId),
             UidUser = Guid.Parse(userId)
         });
-        await Clients.Group(chatId).SendAsync("ReceiveMessage", new
+
+        var messageDto = new
         {
             Content = content,
             SendDate = DateTime.UtcNow,
             UidChannel = Guid.Parse(chatId),
             UidUser = Guid.Parse(userId),
             Name = userName
-        });
+        };
+
+        await Clients.Group(chatId).SendAsync("ReceiveMessage", messageDto);
+        await Clients.All.SendAsync("NewMessageNotification", messageDto);
+
+        _logger.LogInformation($"Message sent to chat: {chatId}");
     }
 
 }

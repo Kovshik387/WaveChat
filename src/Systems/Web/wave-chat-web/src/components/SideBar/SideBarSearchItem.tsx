@@ -54,7 +54,6 @@ export default function SideBarSearchItem(item: SideBarItemProps) {
                     return;
                 }
                 localStorage.removeItem("idChat");
-                item.closeConnection();
                 const idChat = await createNewChat(localStorage.getItem("id")!, anotherUserId);
                 const data = await idChat?.json() as AccountChats;
                 if (!data) return;

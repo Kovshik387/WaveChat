@@ -37,10 +37,15 @@ export default function MainPage() {
         connect.on("ReceiveMessage", (message: MessageInfo) => {
             console.log("Received message:", message);
             setMessages(prevMessages => {
-                console.log('received')
+                console.log('received');
                 const chatMessages = prevMessages[message.uidChannel] || [];
                 return { ...prevMessages, [message.uidChannel]: [...chatMessages, message] };
             });
+        });
+
+        connect.on("NewMessageNotification", (message: MessageInfo) => {
+            console.log("New message notification:", message);
+            updateChatList(message);
         });
 
         connect.onclose((e) => {
@@ -120,18 +125,26 @@ export default function MainPage() {
         }
     };
 
+    const updateChatList = (message: MessageInfo) => {
+
+    };
+
     return (
         <div style={{ flex: 1 }}>
             {localStorage.getItem("id") !== null ? (
-                <div className="row">
-                    <SideBar
-                        closeConnection={closeConnection}
-                        joinRoom={joinRoom}
-                        setCurrentChatId={setCurrentChatId}
-                        messages={messages}
-                        setMessages={setMessages}
-                    />
-                    <div className="col col-sm-9">
+                <div className="row" style={{ justifyContent: 'center',}}>
+                    <div className="col col-sm-2">
+                        <SideBar
+                            connection={connection}
+                            closeConnection={closeConnection}
+                            joinRoom={joinRoom}
+                            setCurrentChatId={setCurrentChatId}
+                            messages={messages}
+                            setMessages={setMessages}
+
+                        />
+                    </div>
+                    <div className="col col-sm-7">
                         {currentChatId && connection ? (
                             <ChatRoom
                                 messages={messages[currentChatId] || []}
@@ -140,12 +153,12 @@ export default function MainPage() {
                                 closeConnection={closeConnection}
                             />
                         ) : (
-                            <h1 style={{ textAlign: "center" }}>Выберите чат</h1>
+                            <h1 style={{ textAlign: "center",top: "45%", left:"60%",position: "absolute",transform: "translate(-50%,-50%)" }}>Выберите чат</h1>
                         )}
                     </div>
                 </div>
             ) : (
-                <div style={CenterText}>
+                <div style={{...CenterText,top: "45%", left:"50%",position: "absolute",transform: "translate(-50%,-50%)" }}>
                     <h1>WaveChat</h1>
                     <h2>Добро пожаловать</h2>
                 </div>

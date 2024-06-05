@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import SideBarItem from "./SideBarItem";
 import AccountChats from "@models/Chat";
-import requestExecuter from "@functions/RequestExecuter";
 import SearchSideBar from "./SearchSideBar";
 import SideBarSearchItem from "./SideBarSearchItem";
 import AccountDetails from "@models/AccountDetails";
 import { MessageInfo } from "@models/MessageInfo";
+import requestExecuter from "@functions/RequestExecuter";
 
 export interface LobbyProps {
+    connection: any;
     joinRoom: (userName: string) => void;
     closeConnection: () => void;
     setCurrentChatId: (chatId: string) => void;
@@ -54,34 +55,34 @@ export default function SideBar(lobby: LobbyProps) {
         }
     }
 
-    useEffect(() => {
-        async function fetchChats() {
-            try {
-                const response = await GetChats();
-                if (response !== null) {
-                    const data = await response.json() as AccountChats[];
-                    if (data.length > 0) {
-                        setAccountsChats(data.reverse());
-                    } else {
-                        console.log("No chats found");
-                    }
+    async function fetchChats() {
+        try {
+            const response = await GetChats();
+            if (response !== null) {
+                const data = await response.json() as AccountChats[];
+                if (data.length > 0) {
+                    setAccountsChats(data.reverse());
                 } else {
-                    console.log("Failed to fetch chats");
+                    console.log("No chats found");
                 }
-            } catch (error) {
-                console.error("Error fetching chats:", error);
+            } else {
+                console.log("Failed to fetch chats");
             }
+        } catch (error) {
+            console.error("Error fetching chats:", error);
         }
+    }
 
+    useEffect(() => {
         fetchChats();
     }, []);
 
     useEffect(() => {
         async function fetchMessages() {
             for (const chat of accountChat) {
-                const response = await getMessages(chat.uid);
+                const response = await requestExecuter<MessageInfo[]>(() => getMessages(chat.uid));
                 if (response !== null) {
-                    const messagesData = await response.json() as MessageInfo[];
+                    const messagesData = response;
                     lobby.setMessages(prevMessages => ({ ...prevMessages, [chat.uid]: messagesData }));
                     console.log(`Messages for chat ${chat.uid}:`, messagesData);
                 }
@@ -93,9 +94,23 @@ export default function SideBar(lobby: LobbyProps) {
         }
     }, [accountChat]);
 
+    useEffect(() => {
+        if (lobby.connection) {
+            lobby.connection.on("NewMessageNotification", (message: MessageInfo) => {
+                console.log("New message notification:", message);
+                // Обновление списка чатов
+                fetchChats();
+            });
+
+            return () => {
+                lobby.connection.off("NewMessageNotification");
+            };
+        }
+    }, [lobby.connection]);
+
     return (
         <>
-            <div className="col col-sm-3" style={{ padding: "20px" }}>
+            <div style={{ padding: "20px" }}>
                 <div style={sidebarStyle}>
                     <SearchSideBar search={search} setSearch={setSearch} setNewAccount={setNewAccountsChats} />
                     {newAccountChat.length > 0 && (
@@ -140,5 +155,5 @@ const sidebarStyle: React.CSSProperties = {
     border: '2px solid #000',
     borderRadius: '10px',
     transition: 'background-color 0.3s, color 0.3s',
-    boxShadow: '0 2px 4px rgba(218, 223, 225, 0.7)',
+    boxShadow: "10px 4px 8px rgba(108, 122, 137, 0.5)",
 };

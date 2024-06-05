@@ -1,15 +1,14 @@
 import AccountChats from "@models/Chat";
-import { LobbyProps } from "./SideBar";
 import getImage from "@functions/GetImage";
 import { useEffect, useState } from "react";
 import { MessageInfo } from "@models/MessageInfo";
 
 interface SideBarItemProps {
     closeConnection: () => void;
-    joinRoom: (userName: string) => void;
+    joinRoom: (chatId: string) => void; // Убедитесь, что параметр - chatId
     setCurrentChatId: (chatId: string) => void;
     chat: AccountChats;
-    messages: MessageInfo[]; // Accept an array of MessageInfo
+    messages: MessageInfo[];
 }
 
 export default function SideBarItem(item: SideBarItemProps) {
@@ -17,7 +16,7 @@ export default function SideBarItem(item: SideBarItemProps) {
     const [anotherUserUrl, setAnotherUserUrl] = useState("");
     const [isHovered, setIsHovered] = useState(false);
     let anotherUserId = "";
-    console.log("item side bar mess: " + item.messages)
+
     if (item.chat.users.length !== 0) {
         anotherUserId = item.chat.users[0].uid;
     }
@@ -25,14 +24,12 @@ export default function SideBarItem(item: SideBarItemProps) {
     useEffect(() => {
         async function getImages() {
             if (anotherUserId !== "") {
-                setAnotherUserUrl(await getImage(anotherUserId));
+                setAnotherUserUrl( await getImage(anotherUserId));
             }
             setUserUrl(await getImage(localStorage.getItem("id")!));
         }
         getImages();
     }, [anotherUserId]);
-
-    const message = item.messages ? (item.messages[item.messages.length - 1] ? item.messages[item.messages.length - 1].content : "") : "";
 
     return (
         <div
@@ -47,11 +44,9 @@ export default function SideBarItem(item: SideBarItemProps) {
                     return;
                 }
                 localStorage.setItem("idChat", item.chat.uid);
-                item.joinRoom(item.chat.uid);
+                await item.joinRoom(item.chat.uid); // Убедитесь, что используете await
                 item.setCurrentChatId(item.chat.uid);
             }}
-        // const lastMessage = item.messages ? item.messages[item.messages.length - 1].content : item.chat.lastMessage;
-            
         >
             <div>
                 <img
@@ -62,10 +57,10 @@ export default function SideBarItem(item: SideBarItemProps) {
             </div>
             <div style={contentStyle}>
                 <span style={{ fontWeight: "bold" }}>
-                    {item.chat.users.length < 1 ? item.chat.name : item.chat.users[0].name + " " + item.chat.users[0].surname}
+                    {item.chat.users.length < 1 ? item.chat.name : `${item.chat.users[0].name} ${item.chat.users[0].surname}`}
                 </span>
                 <div style={lastMessageStyle}>
-                    <p>{message}</p>
+                    <p>{item.chat.lastMessage}</p>
                 </div>
             </div>
         </div>
@@ -73,6 +68,7 @@ export default function SideBarItem(item: SideBarItemProps) {
 }
 
 const contentStyle: React.CSSProperties = {
+    display: "flex",
     flexDirection: "column",
     paddingTop: "10px"
 };

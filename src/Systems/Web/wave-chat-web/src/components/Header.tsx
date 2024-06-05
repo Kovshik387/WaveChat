@@ -46,12 +46,12 @@ export default function HeaderNavigation() {
                 :
                 <Nav>
                   <Navbar.Collapse className="justify-content-end">
-                    <Nav.Link href="/profile">Личный кабинет</Nav.Link>
+                    <Nav.Link href="/profile">Личный кабинет | </Nav.Link>
                   </Navbar.Collapse>
 
                   <Navbar.Collapse className="justify-content-end">
                     <Navbar.Text>
-                      Привет! {localStorage.getItem("name")}
+                      Привет! {localStorage.getItem("name")} |
                     </Navbar.Text>
                     <Nav.Link onClick={() => {
                       RequestExecuter<void>(logout);

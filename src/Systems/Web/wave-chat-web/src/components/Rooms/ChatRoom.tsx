@@ -43,12 +43,12 @@ const ChatRoom = ({
 const modernCardStyle: React.CSSProperties = {
   border: "1px solid rgba(0, 0, 0, 0.125)",
   borderRadius: "10px",
-  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+  boxShadow: "10px 4px 8px rgba(108, 122, 137, 0.5)",
   padding: "20px",
   background: "white",
   transition: "transform 0.2s",
   overflowY: 'scroll',
-  height: '78vh',
+  height: '73vh',
 };
 
 export default ChatRoom;
