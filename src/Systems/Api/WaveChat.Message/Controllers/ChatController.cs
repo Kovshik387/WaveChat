@@ -28,4 +28,12 @@ public class ChatController(IMessageService messageService,IAppLogger logger) : 
     {
         return Ok(await _messageService.GetUserChatsAsync(idUser));
     }
+
+    [HttpGet]
+    [Authorize]
+    [ApiVersion("1.0")]
+    public async Task<IActionResult> GetAccountByUserNameAsync(string userName, string id)
+    {
+        return Ok(await _messageService.GetAccountByUserNameAsync(userName,id));
+    }
 }

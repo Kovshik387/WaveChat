@@ -59,6 +59,48 @@ public class MessageService(ILogger<MessageService> logger,CorporateMessengerCon
         return _mapper.Map<IList<ChatDTO>>(anotherUser);
     }
 
+    public async Task<List<UserDTO>> GetAccountByUserNameAsync(string userName, string uid)
+    {
+        var user = await _context.Users
+            .Where(x => x.Uid.Equals(Guid.Parse(uid)))
+            .FirstOrDefaultAsync();
+
+        if (user is null)
+            throw new Exception("User not found");
+
+        var users = await _context.Users
+            .Where(x => EF.Functions.Like(x.Username, $"%{userName}%"))
+            .ToListAsync();
+
+        var result = new List<UserDTO>();
+
+        var userChatIds = await _context.Userschannels
+            .Where(x => x.Userid.Equals(user.Id))
+            .Select(x => x.Channelid)
+            .ToListAsync();
+
+        if (!userChatIds.Any())
+        {
+            foreach (var item in users)
+            {
+                result.Add(_mapper.Map<UserDTO>(item));
+            }
+            return result;
+        }
+
+        foreach (var item in users)
+        {
+            bool chatExists = await _context.Userschannels
+                .AnyAsync(x => x.Userid.Equals(item.Id) && userChatIds.Contains(x.Channelid));
+
+            if (!chatExists)
+            {
+                result.Add(_mapper.Map<UserDTO>(item));
+            }
+        }
+
+        return result;
+    }
     public async Task<IList<MessageDTO>> GetMessageByChatAsync(string chatId)
     {
         _logger.LogInformation($"{chatId}");

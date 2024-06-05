@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import SideBarItem from "./SideBarItem"
 import AccountChats from "@models/Chat";
 import requestExecuter from "@functions/RequestExecuter";
-import { Search } from "react-bootstrap-icons";
 import SearchSideBar from "./SearchSideBar";
+import SideBarSearchItem from "./SideBarSearchItem";
+import AccountDetails from "@models/AccountDetails";
 
 export interface LobbyProps {
     joinRoom: (userName: string) => void;
@@ -13,6 +14,7 @@ export interface LobbyProps {
 
 export default function SideBar(lobby: LobbyProps) {
     const [accountChat, setAccountsChats] = useState<AccountChats[]>([]);
+    const [newAccountChat, setNewAccountsChats] = useState<AccountDetails[]>([]);
 
     async function GetChats(): Promise<Response | null> {
         const headers = new Headers();
@@ -39,13 +41,35 @@ export default function SideBar(lobby: LobbyProps) {
                 console.log(error);
             }
         }
+
+            
+
         fetchChat();
     }, []);
     return (
         <>
-            <div className="col col-sm-3">
+            <div className="col col-sm-3" style={{ padding: "20px" }}>
                 <div style={sidebarStyle}>
-                    <SearchSideBar />
+                    <SearchSideBar setNewAccount={setNewAccountsChats} />
+                    {
+                        (newAccountChat
+                            ?
+                            <div>
+                                {
+                                    newAccountChat.map((chat, index) => (
+                                        <SideBarSearchItem chat={chat} key={index} joinRoom={lobby.joinRoom} closeConnection={lobby.closeConnection} setCurrentChatId={lobby.setCurrentChatId} />
+                                    ))
+                                }
+                                <hr></hr>
+                            </div>
+
+                            :
+
+                            <div></div>
+
+                        )
+                    }
+
                     {
                         accountChat.map((chat, index) => (
                             <SideBarItem chat={chat} key={index} joinRoom={lobby.joinRoom} closeConnection={lobby.closeConnection} setCurrentChatId={lobby.setCurrentChatId} />
@@ -63,13 +87,8 @@ const sidebarStyle: React.CSSProperties = {
     height: '85vh',
     overflowY: 'auto',
     padding: '20px',
+    border: '2px solid #000',
+    borderRadius: '10px',
+    transition: 'background-color 0.3s, color 0.3s',
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
 };
-
-const sideBar: React.CSSProperties = {
-    backgroundColor: "#242424",
-    alignItems: "center",
-    paddingTop: "20px",
-    border: "black 10px double",
-    height: "500px",
-    overflowY: "scroll"
-}

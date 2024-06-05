@@ -2,24 +2,23 @@ import AccountChats from "@models/Chat";
 import { LobbyProps } from "./SideBar";
 import getImage from "@functions/GetImage";
 import { useEffect, useState } from "react";
+import AccountDetails from "@models/AccountDetails";
 
 interface SideBarItemProps extends LobbyProps {
     closeConnection: () => void;
     joinRoom: (userName: string) => void;
     setCurrentChatId: (chatId: string) => void;
-    chat: AccountChats;
+    chat: AccountDetails;
 }
 
-export default function SideBarItem(item: SideBarItemProps) {
+export default function SideBarSearchItem(item: SideBarItemProps) {
 
     const [userUrl, setUserUrl] = useState("");
     const [anotherUserUrl, setAnotherUserUrl] = useState("");
     const [isHovered, setIsHovered] = useState(false);
     let anotherUserId = "";
     console.log(item.chat)
-    if (item.chat.users.length != 0) {
-        anotherUserId = item.chat.users[0].uid;
-    }
+    anotherUserId = item.chat.uid;
 
     useEffect(() => {
         async function getImages() {
@@ -58,12 +57,12 @@ export default function SideBarItem(item: SideBarItemProps) {
                 <div style={contentStyle}>
                     <span
                         style={{ fontWeight: "bold" }}>
-                        {item.chat.users.length < 1 ? item.chat.name : item.chat.users[0].name}
+                        {item.chat.name}
                     </span>
                     <div style={lastMessageStyle}>
-                        <p>
+                        {/* <p>
                             {item.chat.lastMessage}
-                        </p>
+                        </p> */}
                     </div>
                 </div>
             </div>

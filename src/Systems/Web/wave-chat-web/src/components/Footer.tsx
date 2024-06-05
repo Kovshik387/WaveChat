@@ -14,4 +14,5 @@ const FooterStyle : React.CSSProperties = {
     color: "white",
     display: "flex",
     alignItems: "center",
+    marginTop: "10px"
 }

@@ -39,12 +39,10 @@ export default function HeaderNavigation() {
             <Navbar.Toggle></Navbar.Toggle>
             {
               localStorage.getItem("id") === null ?
-
                 <Navbar.Collapse className="justify-content-end">
                   <Nav.Link href="/signIn">Войти</Nav.Link>
                   <Nav.Link href="/signUp">Регистрация</Nav.Link>
                 </Navbar.Collapse>
-
                 :
                 <Nav>
                   <Navbar.Collapse className="justify-content-end">
@@ -59,7 +57,6 @@ export default function HeaderNavigation() {
                       RequestExecuter<void>(logout);
                     }} >Выйти</Nav.Link>
                   </Navbar.Collapse>
-
                 </Nav>
             }
           </Nav>

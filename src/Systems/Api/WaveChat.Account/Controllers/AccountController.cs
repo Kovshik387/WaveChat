@@ -33,4 +33,11 @@ public class AccountController(IAppLogger logger, IAccountService accountService
     {
         return Ok(await _accountService.GetAccountDetailsByIdAsync(id));
     }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> GetAccountByUserName(string userName,string id)
+    {
+        return Ok(await _accountService.GetAccountByUserNameAsync(userName, id));
+    }
 }

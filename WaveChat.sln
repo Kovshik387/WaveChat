@@ -62,7 +62,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Services.Account",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Message", "src\Systems\Api\WaveChat.Message\WaveChat.Message.csproj", "{ADCEA828-6945-4761-ACFC-B7A36BDF29D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaveChat.Services.Message", "src\Services\WaveChat.Services.Message\WaveChat.Services.Message.csproj", "{14BBD111-E209-4602-BC63-670FFDEC9461}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaveChat.Services.Message", "src\Services\WaveChat.Services.Message\WaveChat.Services.Message.csproj", "{14BBD111-E209-4602-BC63-670FFDEC9461}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

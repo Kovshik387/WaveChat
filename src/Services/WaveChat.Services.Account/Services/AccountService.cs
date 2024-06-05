@@ -2,6 +2,7 @@
 using Castle.Core.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.Extensions.Logging;
 using WaveChat.Common;
 using WaveChat.Common.Extensions;
@@ -67,6 +68,4 @@ public class AccountService(CorporateMessengerContext context,IMapper mapper, IL
         
         return true;
     }
-
-
 }
