@@ -3,6 +3,8 @@ import SideBar from "@components/SideBar/SideBar";
 import { HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { MessageInfo } from "@models/MessageInfo";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { login } from "./../stores/accountSlice";
 
 async function getMessages(chatId: string): Promise<Response | null> {
     const headers = new Headers();
@@ -24,6 +26,13 @@ async function getMessages(chatId: string): Promise<Response | null> {
 }
 
 export default function MainPage() {
+    const dispatch = useDispatch();
+    console.log("name: " + localStorage.getItem("name"));
+
+    if (localStorage.getItem("name")) {
+        dispatch(login(localStorage.getItem("name")!));
+    }
+
     const [connection, setConnection] = useState<any>(null);
     const [messages, setMessages] = useState<{ [key: string]: MessageInfo[] }>({});
     const [currentChatId, setCurrentChatId] = useState<string | null>(null);
@@ -133,7 +142,7 @@ export default function MainPage() {
     return (
         <div style={{ flex: 1 }}>
             {localStorage.getItem("id") !== null ? (
-                <div className="row" style={{ justifyContent: 'center',}}>
+                <div className="row" style={{ justifyContent: 'center' }}>
                     <div className="col col-sm-2">
                         <SideBar
                             connection={connection}
@@ -154,12 +163,12 @@ export default function MainPage() {
                                 closeConnection={closeConnection}
                             />
                         ) : (
-                            <h1 style={{ textAlign: "center",top: "45%", left:"60%",position: "absolute",transform: "translate(-50%,-50%)" }}>Начните общаться сейчас!</h1>
+                            <h1 style={{ textAlign: "center", top: "45%", left: "60%", position: "absolute", transform: "translate(-50%,-50%)" }}>Начните общаться сейчас!</h1>
                         )}
                     </div>
                 </div>
             ) : (
-                <div style={{...CenterText,top: "45%", left:"50%",position: "absolute",transform: "translate(-50%,-50%)" }}>
+                <div style={{ ...CenterText, top: "45%", left: "50%", position: "absolute", transform: "translate(-50%,-50%)" }}>
                     <h1>WaveChat</h1>
                     <h2>Добро пожаловать</h2>
                 </div>

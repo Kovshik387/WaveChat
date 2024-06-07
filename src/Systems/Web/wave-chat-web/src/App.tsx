@@ -4,49 +4,49 @@ import AccountInfo from "@pages/Account/Account";
 import SignInPage from "@pages/Authorization/SignIn";
 import SignUpPage from "@pages/Authorization/SignUp";
 import MainPage from "@pages/MainPage";
-import { useState } from "react";
+import { Provider } from "react-redux";
 import * as ReactRouter from "react-router-dom";
+import store from "./stores/store";
 
 
-export default function App(){
-	
-	//const [header,setHeader] = useState("");
-
+export default function App() {
 	const router = ReactRouter.createBrowserRouter([
 		{
-      path: "/",
-      element: <MainPage/>
-    },
-    {
-      path: "/signIn",
-      element: <SignInPage/>
-    },
-    {
-      path: "/signUp",
-      element: <SignUpPage/>
-    },
-	{
-		path: "/profile",
-		element: <AccountInfo/>
-	}
+			path: "/",
+			element: <MainPage />
+		},
+		{
+			path: "/signIn",
+			element: <SignInPage />
+		},
+		{
+			path: "/signUp",
+			element: <SignUpPage />
+		},
+		{
+			path: "/profile",
+			element: <AccountInfo />
+		}
 	]);
 	return (
 		<>
-			<HeaderNavigation />
+			<Provider store={store}>
+				<HeaderNavigation />
 				<div style={mainContent}>
 					<div className="row">
 						<div>
-							<ReactRouter.RouterProvider router={router}/>
+							<ReactRouter.RouterProvider router={router} />
 						</div>
 					</div>
 				</div>
-			<Footer/>
+				<Footer />
+			</Provider>
 		</>
 	);
-	
+
 
 }
-const mainContent : React.CSSProperties = {
+const mainContent: React.CSSProperties = {
 	display: "flex",
 	justifyContent: "flex-end",
 	flexDirection: "column",

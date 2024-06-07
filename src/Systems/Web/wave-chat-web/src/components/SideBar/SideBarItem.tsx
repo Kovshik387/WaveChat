@@ -40,9 +40,6 @@ export default function SideBarItem(item: SideBarItemProps) {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={async () => {
-                if (item.chat.uid === localStorage.getItem("idChat")) {
-                    return;
-                }
                 localStorage.setItem("idChat", item.chat.uid);
                 await item.joinRoom(item.chat.uid); // Убедитесь, что используете await
                 item.setCurrentChatId(item.chat.uid);

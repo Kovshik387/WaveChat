@@ -2,13 +2,19 @@ import requestExecuter from "@functions/RequestExecuter";
 import AccountDetails from "@models/AccountDetails";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, InputGroup, Modal, Row, Stack } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { login } from "./../../stores/accountSlice";
 
 export default function AccountInfo() {
     const navigation = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const dispatch = useDispatch();
 
+    if (localStorage.getItem("name")){
+        dispatch(login(localStorage.getItem("name")!));
+    }
 
     const [accountDetails, setAccountDetails] = useState<AccountDetails>({
         uid: '',

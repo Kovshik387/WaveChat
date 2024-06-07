@@ -131,7 +131,8 @@ public class AuthorizationService(IMapper mapper, IValidator<SignUpDTO> signUpVa
             Data = new AuthDTO()
             { RefreshToken = token.RefreshToken,
                 AccessToken = token.AccessToken,
-                Id = userGuid
+                Id = userGuid,
+                Name = user.Name
             },
             ErrorMessage = ""
         };
