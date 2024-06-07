@@ -21,8 +21,7 @@ namespace WaveChat.Storage.Controllers
         [HttpPut]
         public async Task<IActionResult> PutProfileFile(string userId, IFormFile file)
         {
-           if (await _storageService.AddProfileFileAsync(userId, file)) return Ok();
-           return BadRequest();
+           return Ok(await _storageService.AddProfileFileAsync(userId, file));
         }
         /// <summary>
         /// Получения файла по Id пользователя и его названию

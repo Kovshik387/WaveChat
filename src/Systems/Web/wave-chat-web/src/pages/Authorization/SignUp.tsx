@@ -1,7 +1,9 @@
 import {useNavigate } from 'react-router-dom'
 import { Col, Container,Form,InputGroup, Row} from "react-bootstrap"
 import { Eye,EyeSlashFill } from "react-bootstrap-icons"
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { login } from './../../stores/accountSlice';
 export type AuthRequest = {
     name: String,
     lastName: String,
@@ -15,7 +17,8 @@ export type AuthRequest = {
 export type data = {
     id: string | null,
     accessToken: string | null,
-    refreshToken: string | null
+    refreshToken: string | null,
+    name: string | null
 }
 
 export type AuthResponse = {
@@ -24,6 +27,8 @@ export type AuthResponse = {
 };
 
 export default function SignInPage(){
+    const [userName,setUserName] = useState("");
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
     if(localStorage.getItem('id') != null) navigate('/');
@@ -81,7 +86,9 @@ export default function SignInPage(){
             localStorage.setItem("id",response.data.id!.toString());
             localStorage.setItem("accessToken",response.data.accessToken!);
             localStorage.setItem("refreshToken",response.data.refreshToken!);
-            navigate('/');
+            localStorage.setItem("name",response.data.name!);
+            dispatch(login(response.data.name!));   
+            navigate("/");
         }
     }
 
@@ -93,7 +100,7 @@ export default function SignInPage(){
                     <h3>Регистрация</h3>
                     <Form onSubmit={handleSubmit} >
                         <Row>
-                            <Col>
+                            <Col style={{padding: "10px"}}>
                                 <Form.Group className="mb-3" >
                                     <Form.Label>Почта</Form.Label>
                                     <InputGroup hasValidation >
@@ -117,7 +124,7 @@ export default function SignInPage(){
                                 </Form.Group>
                             </Col>
                             
-                            <Col>
+                            <Col style={{padding: "10px"}}>
                                 <Form.Group className="mb-3" >
                                     <Form.Label>Фамилия</Form.Label>
                                     <InputGroup hasValidation  >

@@ -10,6 +10,7 @@ namespace WaveChat.Services.Account.Infrastructure;
 
 public interface IAccountService
 {
-    public Task<bool> UpdateAccountDataAsync(AccountDto account);
+    public Task<bool> UpdateAccountDataAsync(AccountDetailsDTO account);
     public Task<AccountDto> GetAccountByIdAsync(string id);
+    public Task<AccountDetailsDTO> GetAccountDetailsByIdAsync(string id);
 }

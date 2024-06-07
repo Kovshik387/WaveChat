@@ -1,30 +1,40 @@
 import AccountChats from "@models/Chat";
+import { LobbyProps } from "./SideBar";
 import getImage from "@functions/GetImage";
 import { useEffect, useState } from "react";
-import { MessageInfo } from "@models/MessageInfo";
+import AccountDetails from "@models/AccountDetails";
 
 interface SideBarItemProps {
     closeConnection: () => void;
-    joinRoom: (chatId: string) => void; // Убедитесь, что параметр - chatId
+    joinRoom: (userName: string) => void;
     setCurrentChatId: (chatId: string) => void;
-    chat: AccountChats;
-    messages: MessageInfo[];
+    newChat: AccountDetails;
+    chat: AccountChats[];
+    setNewAccount: (value: AccountDetails[]) => void;
+    setSearch: (value: string) => void;
 }
 
-export default function SideBarItem(item: SideBarItemProps) {
+async function createNewChat(idUser: string, idAnotherUser: string) {
+    const headers = new Headers();
+    headers.set('Access-Control-Allow-Origin', '*');
+    headers.set('Content-Type', 'application/json');
+    headers.set("Authorization", "Bearer " + localStorage.getItem("accessToken")!);
+    const url = `http://localhost:8020/v1/Chat/NewChat?idUser=${idUser}&idAnotherUser=${idAnotherUser}`;
+    try {
+        return fetch(url, { method: 'POST', headers: headers });
+    } catch (error) { return null; }
+}
+
+export default function SideBarSearchItem(item: SideBarItemProps) {
     const [userUrl, setUserUrl] = useState("");
     const [anotherUserUrl, setAnotherUserUrl] = useState("");
     const [isHovered, setIsHovered] = useState(false);
-    let anotherUserId = "";
-
-    if (item.chat.users.length !== 0) {
-        anotherUserId = item.chat.users[0].uid;
-    }
+    const anotherUserId = item.newChat.uid;
 
     useEffect(() => {
         async function getImages() {
             if (anotherUserId !== "") {
-                setAnotherUserUrl( await getImage(anotherUserId));
+                setAnotherUserUrl(await getImage(anotherUserId));
             }
             setUserUrl(await getImage(localStorage.getItem("id")!));
         }
@@ -40,32 +50,39 @@ export default function SideBarItem(item: SideBarItemProps) {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={async () => {
-                localStorage.setItem("idChat", item.chat.uid);
-                await item.joinRoom(item.chat.uid); // Убедитесь, что используете await
-                item.setCurrentChatId(item.chat.uid);
+                if (item.newChat.uid === localStorage.getItem("idChat")) {
+                    return;
+                }
+                localStorage.removeItem("idChat");
+                const idChat = await createNewChat(localStorage.getItem("id")!, anotherUserId);
+                const data = await idChat?.json() as AccountChats;
+                if (!data) return;
+
+                item.chat.push(data);
+                item.setNewAccount([]);
+                localStorage.setItem("idChat", data.uid);
+
+                item.joinRoom(data.uid);
+                item.setCurrentChatId(data.uid);
             }}
         >
             <div>
                 <img
                     style={imageStyle}
                     src={anotherUserUrl === "" || anotherUserUrl === null ? "https://cdn-icons-png.flaticon.com/512/149/149452.png" : anotherUserUrl}
-                    alt={item.chat.name}
+                    alt={item.newChat.name}
                 />
             </div>
             <div style={contentStyle}>
                 <span style={{ fontWeight: "bold" }}>
-                    {item.chat.users.length < 1 ? item.chat.name : `${item.chat.users[0].name} ${item.chat.users[0].surname}`}
+                    {item.newChat.name}
                 </span>
-                <div style={lastMessageStyle}>
-                    <p>{item.chat.lastMessage}</p>
-                </div>
             </div>
         </div>
     );
 }
 
 const contentStyle: React.CSSProperties = {
-    display: "flex",
     flexDirection: "column",
     paddingTop: "10px"
 };

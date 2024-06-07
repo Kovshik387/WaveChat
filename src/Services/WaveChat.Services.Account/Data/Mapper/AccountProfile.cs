@@ -14,6 +14,7 @@ namespace WaveChat.Services.Account.Data.Mapper
         public AccountProfile()
         {
             CreateMap<User, AccountDto>().ReverseMap();
+            CreateMap<User,AccountDetailsDTO>().ReverseMap();
         }
     }
 }

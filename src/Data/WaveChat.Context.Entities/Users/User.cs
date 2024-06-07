@@ -22,7 +22,6 @@ public partial class User : EntityBase
     public string Passwordhash { get; set; } = null!;
     public string RefreshToken { get; set; } = null!;
     public DateOnly Registrationdate { get; set; }
-
     public DateOnly Lastvisitdate { get; set; }
 
     public int? Roletype { get; set; }
@@ -32,10 +31,8 @@ public partial class User : EntityBase
     public virtual ICollection<Dependency> Dependencies { get; set; } = new List<Dependency>();
 
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
-
+    public virtual ICollection<Userschannel> Userschannels { get; set; } = new List<Userschannel>();
     public virtual ICollection<Newscomment> Newscomments { get; set; } = new List<Newscomment>();
-
     public virtual ICollection<Photo> Photos { get; set; } = new List<Photo>();
-
     public virtual Rolestype? RoletypeNavigation { get; set; }
 }

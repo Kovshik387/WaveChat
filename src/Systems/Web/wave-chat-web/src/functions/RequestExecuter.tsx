@@ -1,74 +1,110 @@
-export default async function requestExecuter<Tdata>(func: () => Promise<Response | null>) : Promise<Tdata | null> {
+export default async function requestExecuter<Tdata>(func: () => Promise<Response | null>): Promise<Tdata | null> {
+    let response: Response | null;
+    try {
+        response = await func();
 
-    try{
-        const response = await func();
-        if (response === null){
-            updateToken();
+        if (response && response.status === 401) {
+            const tokenRefreshed = await tryRefreshToken();
+            if (tokenRefreshed) {
+                response = await func();
+            }
         }
-        const newResposne = await func();
-        return newResposne!.json() as Tdata;
-    }
-    catch (error) {
-        try{
-            await updateToken();
-            console.log("update token");
-            const response = await func();
-            console.log(response!.status);
-            return await response!.json() as Tdata;
+
+        if (!response) {
+            return null;
         }
-        catch(newError){
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
-            localStorage.removeItem("id");
-            localStorage.removeItem("name");
+
+        return await response.json() as Tdata;
+    } catch (error) {
+        console.error("Initial request failed", error);
+        try {
+            const tokenRefreshed = await tryRefreshToken();
+            if (tokenRefreshed) {
+                response = await func();
+                if (!response) {
+                    return null;
+                }
+                return await response.json() as Tdata;
+            } else {
+                return null;
+            }
+        } catch (newError) {
+            console.error("Request failed after token refresh", newError);
+            clearLocalStorage();
             return null;
         }
     }
 }
 
-async function updateToken() {
-    const headers = new Headers();
+async function tryRefreshToken(): Promise<boolean> {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (!refreshToken) {
+        console.log("Refresh token is missing");
+        clearLocalStorage();
+        return false;
+    }
 
-    if (localStorage.getItem("refreshToken") === null) {
-        console.log("refresh пуст")
-        return;
+    try {
+        const response = await fetch(getRefreshTokenUrl(refreshToken), getRefreshTokenRequestOptions());
+        return await handleRefreshTokenResponse(response);
+    } catch (error) {
+        console.error("Failed to refresh token", error);
+        clearLocalStorage();
+        return false;
+    }
+}
+
+function getRefreshTokenUrl(refreshToken: string): string {
+    return `http://localhost:8010/v1/Authorization/RefreshAccess?refreshToken=${refreshToken}`;
+}
+
+function getRefreshTokenRequestOptions(): RequestInit {
+    return {
+        method: 'GET',
+        headers: new Headers({
+            'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem("accessToken")}`
+        })
     };
-    console.log("Внутри что-то есть")
-    headers.set('Access-Control-Allow-Origin', '*');
-    headers.set('Content-Type','application/json');
-    headers.set("Authorization","Bearer "+ localStorage.getItem("accessToken")!);
-    console.log("refresh: " + localStorage.getItem("refreshToken"));
-    const url = `http://localhost:8010/v1/Authorization/RefreshAccess?refreshToken=${localStorage.getItem("refreshToken")}`;
-    console.log("обновление")
-    const response = await fetch(url,{method: 'Get',headers: headers});
-    if (response.status == 200){
-        var result: AuthResponse = await response.json()
-        if(result.errorMessage === ""){
-            console.log("Данные обновлены");
-            localStorage.setItem("accessToken",result.data.accessToken!);
-            localStorage.setItem("refreshToken",result.data.refreshToken!);
+}
+
+async function handleRefreshTokenResponse(response: Response): Promise<boolean> {
+    if (response.status === 200) {
+        const result: AuthResponse = await response.json();
+        if (result.errorMessage === "") {
+            saveTokens(result.data);
+            return true;
+        } else {
+            console.error("Error updating token:", result.errorMessage);
         }
-        else{
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
-            localStorage.removeItem("id");
-        }
+    } else {
+        console.error("Failed to update token, response status:", response.status);
     }
-    else{
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("id");
-    }
-    return 
+    clearLocalStorage();
+    return false;
+}
+
+function saveTokens(data: data): void {
+    localStorage.setItem("accessToken", data.accessToken!);
+    localStorage.setItem("refreshToken", data.refreshToken!);
+    localStorage.setItem("id", data.id!);
+}
+
+function clearLocalStorage(): void {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("id");
+    localStorage.removeItem("name");
 }
 
 export type data = {
-    id: string | null,
-    accessToken: string | null,
-    refreshToken: string | null
+    id: string | null;
+    accessToken: string | null;
+    refreshToken: string | null;
 }
 
 export type AuthResponse = {
-    data: data
-    errorMessage: string
+    data: data;
+    errorMessage: string;
 };

@@ -6,6 +6,7 @@ interface MessageItemProps {
 }
 
 export default function Message({ message }: MessageItemProps) {
+
 	return (
 		<>
 			{
@@ -24,9 +25,12 @@ export default function Message({ message }: MessageItemProps) {
 					:
 					<div style={leftFloat}>
 						<div>
-							<span style={{ fontWeight: "bold" }}>{message.name}</span>
+							<span style={{ fontWeight: "bold", color: "black" }}>{message.name}</span>
 							<p style={messageContent}>
 								{message.content}
+							</p>
+							<p style={{ color: "" }}>
+								{formatDate(new Date(message.sendDate))}
 							</p>
 						</div>
 					</div>
@@ -60,6 +64,8 @@ const rightFloat: React.CSSProperties = {
 }
 
 const messageContent: React.CSSProperties = {
+	border: "1px solid rgba(0, 0, 0, 0.125)",
+	boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
 	maxWidth: "100%",
 	padding: "10px",
 	borderRadius: "10px",

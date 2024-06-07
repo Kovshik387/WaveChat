@@ -1,7 +1,9 @@
 import { Button, Container,Form, InputGroup} from "react-bootstrap"
 import { Eye,EyeSlashFill } from "react-bootstrap-icons"
 import {useNavigate } from 'react-router-dom'
-import React from "react";
+import React, { useState } from "react"
+import { useDispatch } from "react-redux";
+import { login } from "./../../stores/accountSlice";
 
 export type AuthAccount = {
     email: string,
@@ -21,6 +23,9 @@ export type AuthResponse = {
 };
 
 export default function SignInPage(){
+    const [userName,setUserName] = useState("");
+    const dispatch = useDispatch();
+
     const navigate = useNavigate();
 
     const [showPassword, setShowPassword] = React.useState(false);
@@ -49,8 +54,10 @@ export default function SignInPage(){
             localStorage.setItem("refreshToken",data.data.refreshToken!);
             localStorage.setItem("name",data.data.name!);
             localStorage.removeItem("idChat");
+            setUserName(data.data.name!);
+            dispatch(login(userName))
             navigate('/');
-            window.location.reload()
+            //window.location.reload()
         }
     }
 

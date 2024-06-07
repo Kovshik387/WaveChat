@@ -1,7 +1,8 @@
 export type MessageInfo = {
-    content: String,
+    content: string,
     sendDate: Date,
-    uid: String,
-    uidUser: String,
-    name: String
+    uid: string,
+    uidUser: string,
+    name: string,
+    uidChannel: string
 }

@@ -14,7 +14,7 @@ public class AccountController(IAppLogger logger, IAccountService accountService
 
     [Authorize]
     [HttpPatch]
-    public async Task<IActionResult> UpdateUserData(AccountDto accountDto)
+    public async Task<IActionResult> UpdateUserData(AccountDetailsDTO accountDto)
     {
         await _accountService.UpdateAccountDataAsync(accountDto);
         return Ok("");
@@ -26,4 +26,13 @@ public class AccountController(IAppLogger logger, IAccountService accountService
     {
         return Ok(await _accountService.GetAccountByIdAsync(id));
     }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<IActionResult> GetAccountDetailsById(string id)
+    {
+        return Ok(await _accountService.GetAccountDetailsByIdAsync(id));
+    }
+
+
 }

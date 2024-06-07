@@ -12,7 +12,7 @@ namespace WaveChat.Services.Storage.Infrastructure
     /// </summary>
     public interface IStorageService
     {
-        public Task<bool> AddProfileFileAsync(string userId, IFormFile file);
+        public Task<string> AddProfileFileAsync(string userId, IFormFile file);
         public Task<string> GetPresignedFileAsync(string userId);
     }
 }

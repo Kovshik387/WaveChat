@@ -20,6 +20,7 @@ public static class Bootstrapper
             .AddUserAccountService()
             .AddPathSettings()
             .AddMessageService()
+            .AddSignalR()
             ;
 
         return services;
